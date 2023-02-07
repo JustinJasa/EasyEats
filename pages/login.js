@@ -39,7 +39,7 @@ export default function Login() {
                 <img
                     className="w-full h-full object-cover"
                     alt="Picture of various dishes"
-                    src={loginImg}
+                    src="https://picsum.photos/800/800"
                  />
             </div>
         </div>
