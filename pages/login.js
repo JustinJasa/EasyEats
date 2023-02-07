@@ -31,7 +31,7 @@ export default function Login() {
                         </a>
                     </div>
 
-                    <p>Don't have an account? <span className="font-semibold text-green-600">Sign Up!</span></p>
+                    <p>Don't have an account? <Link href="#" className="font-semibold text-green-600">Sign Up!</Link></p>
                 </div>
             </div>
 
