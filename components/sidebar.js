@@ -1,29 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
-let categories = [
-  "Recommended",
-  "Top-Picks",
-  "Asian",
-  "Poultry",
-  "Meat",
-  "Middle-East",
-  "Quick",
-  "Cheap",
-  "Noodles",
-  "Vegan",
-  "Beef",
-  "Breakfast",
-  "Lunch",
-  "Dinner",
-  "Snacks",
-  "Dessert",
-  "Savory",
-  "Spicy",
-  "Non-Spicy",
-];
-
-function Sidebar() {
+function Sidebar({ categories }) {
+  
   return (
     <aside className="bg-gray-100 h-full w-48 fixed text-center overflow-scroll">
       <img
@@ -33,13 +12,16 @@ function Sidebar() {
       />
       <h2 className="text-xl mt-12 mb-6 text-bold font-bold">Discover Food</h2>
       <nav className="child-hover:text-blue-500 child:list-none">
-        {categories.map((category, index) => {
-          return (
-            // <Link href={`${category}`}>
-              <li className="pb-2 pt-2" key={index}>{category}</li>
-            // </Link>
-          );
-        })}
+        {categories &&
+          categories.map((category, index) => {
+            return (
+              // <Link href={`${category}`}> This will be put in later on
+              <li className="pb-2 pt-2" key={index}>
+                {category}
+              </li>
+              // </Link>
+            );
+          })}
       </nav>
     </aside>
   );
