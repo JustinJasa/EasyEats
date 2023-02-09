@@ -1,11 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import CategorySelector from "./categoryselector";
-import Sidebar from "./sidebar";
+import { useRouter, UseRouter } from "next/router";
 
-function Layout({children}) {
+function Layout({ children }) {
+  const router = useRouter();
+  const path = router.asPath;
+  const [pathName, setPathName] = useState(path)
+
   return (
     <>
-      <CategorySelector />
+      {pathName == '/signup' || pathName == '/login' ? (
+        null
+      ) : <CategorySelector />}
+
       <main>{children}</main>
     </>
   );
