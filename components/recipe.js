@@ -53,20 +53,31 @@ export default function Recipe({ recipeId }) {
           {`${recipe.name}.`}
         </h2>
         <p className="text-xl font-semibold text-center mb-2">
-           <span className="text-sm italic">{recipe.creator}</span>
+          <span className="text-sm italic">{recipe.creator}</span>
         </p>
         <div className="self-center md:max-w-screen-lg  mb-4">
           <ImageCarousel>
             {recipe.pictures.map((picture) => (
-              
               <img
                 className="w-full h-full object-fill rounded-xl"
                 src={picture.src}
                 alt={picture.alt}
               />
-
             ))}
           </ImageCarousel>
+        </div>
+        <h2 className="text-5xl font-bold mb-4">Categories</h2>
+        <div className="flex flex-row flex-wrap py-1 mb-3">
+          {recipe.categories.map((category, index) => {
+            return (
+              <span
+                key={index}
+                className="border-2 rounded-2xl border-green-400 px-2 py-1 mr-1"
+              >
+                {category}
+              </span>
+            );
+          })}
         </div>
 
         <h2 className="text-5xl font-bold mb-4">Ingredients</h2>
@@ -90,20 +101,6 @@ export default function Recipe({ recipeId }) {
             );
           })}
         </ol>
-
-        <h2 className="text-5xl font-bold mb-4">Categories</h2>
-        <div className="flex flex-row flex-wrap py-1 mb-3">
-          {recipe.categories.map((category, index) => {
-            return (
-              <span
-                key={index}
-                className="border-2 rounded-2xl border-green-400 px-2 py-1 mr-1"
-              >
-                {category}
-              </span>
-            );
-          })}
-        </div>
 
         <div className="text-center">
           <button className="border-2 bg-green-600 rounded-full font-semibold text-white px-12 py-2 my-2">
