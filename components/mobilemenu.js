@@ -24,7 +24,7 @@ function MobileMenu() {
   ];
 
   return (
-    <div className="flex overflow-x-scroll p-4">
+    <div className="flex overflow-x-scroll p-6 mb-4 ">
       {categories.map((category, index) => {
         return (
           <nav key={index} className="flex flex-row">

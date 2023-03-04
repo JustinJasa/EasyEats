@@ -29,7 +29,7 @@ export default function LoginCard() {
             </a>
         </div>
 
-        <p>Don't have an account? <Link href="#" className="font-semibold text-green-600">Sign Up!</Link></p>
+        <p>Don't have an account? <Link href="/signup" className="font-semibold text-green-600">Sign Up!</Link></p>
     </div>
   )
 }

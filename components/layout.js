@@ -4,15 +4,13 @@ import { useRouter, UseRouter } from "next/router";
 
 function Layout({ children }) {
   const router = useRouter();
-  const path = router.asPath;
-  const [pathName, setPathName] = useState(path)
+  const noNav =  ['/login', '/signup'];
+
+  console.log(noNav.includes(router.pathname))
 
   return (
     <>
-      {pathName == '/signup' || pathName == '/login' ? (
-        null
-      ) : <CategorySelector />}
-
+      {noNav.includes(router.pathname) ? null : <CategorySelector />} 
       <main>{children}</main>
     </>
   );
