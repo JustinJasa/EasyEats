@@ -6,24 +6,24 @@ import Spinner from "./spinner";
 
 function CreateRecipe() {
   const [title, setTitle] = useState("");
-  const [about, setAbout] = useState("");
   const [loading, setLoading] = useState(false);
   const [destination, setDestination] = useState();
   const [fields, setFields] = useState(false);
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState([]);
   const [imageAsset, setImageAsset] = useState();
   const [wrongImageType, setWrongImageType] = useState(false);
   const [user, setUser] = useState(false);
   const [ingredientModal, setIngredientModal] = useState(false);
   const [instructionModal, setInstructionModal] = useState(false);
-  const [ingredients, setIngredients] = useState([])
-  const [newIngredient, setNewIngredient] = useState([])
-
-  console.log(ingredients)
+  const [ingredients, setIngredients] = useState([]);
+  const [newIngredient, setNewIngredient] = useState([]);
+  const [instructions, setIntructions] = useState([]);
+  const [newInstructions, setNewInstructions] = useState([]);
 
   let images = [];
 
-  let instructions = [];
+  console.log(category);
+  console.log(setCategory);
 
   let categories = [
     "Recommended",
@@ -47,7 +47,6 @@ function CreateRecipe() {
     "Non-Spicy",
   ];
 
-
   const savePin = () => {
     console.log("hi");
   };
@@ -60,12 +59,43 @@ function CreateRecipe() {
     e.preventDefault();
     if (!newIngredient) return;
     setIngredients([...ingredients, { id: Date.now(), text: newIngredient }]);
-    setNewIngredient('');
+    setNewIngredient("");
+  };
+
+  const submitInstruction = (e) => {
+    e.preventDefault();
+    if (!newInstructions) return;
+    setIntructions([
+      ...instructions,
+      { id: Date.now(), text: newInstructions },
+    ]);
+    setNewInstructions("");
+  };
+
+  const deleteIngredient = (text) => {
+    setIngredients(
+      ingredients.filter((ingredients) => ingredients.text !== text)
+    );
+  };
+
+  const categoryChange = (e) => {
+    const { value } = e.target;
+    setCategory((prevSelectedOptions) => [...prevSelectedOptions, value]);
+  };
+
+  const deleteCategory = (value) => { 
+    console.log(value)
+    console.log(category.value)
+    setCategory(
+      category.filter((category) => category !== value)
+    )
   }
 
-  const handleTodoDelete = (id) => { 
-    setIngredients(ingredients.filter((ingredients) => ingredients.id !== id));
-  }
+  const deleteInstruction = (id) => {
+    setIntructions(
+      instructions.filter((instructions) => instructions.id !== id)
+    );
+  };
 
   return (
     <div className="flex flex-col justify-center items-center lg:ml-20">
@@ -76,7 +106,9 @@ function CreateRecipe() {
       )}
       <div className=" flex flex-col justify-center items-center bg-white lg:p-5 p-3 lg:w-3/5 w-full mt-12">
         <h2 className="text-4xl font-bold mb-4">Create a Recipe 🥘 </h2>
-        <h4 className="text-lg italic mb-4">Share your wonderful recipe to world!</h4>
+        <h4 className="text-lg italic mb-4">
+          Share your wonderful recipe to world!
+        </h4>
         <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
           <div className=" flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420">
             {loading && <Spinner />}
@@ -141,26 +173,29 @@ function CreateRecipe() {
           )}
           <div>
             <p className="mb-2 font-semibold text:lg sm:text-xl">
-              Choose Pin Category
+              Choose Recipe Category
             </p>
-            <select
-              onChange={(e) => {
-                setCategory(e.target.value);
-              }}
-              className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
-            >
-              <option value="others" className="sm:text-bg bg-white p-2">
-                Select Category
-              </option>
-              {categories.map((item) => (
-                <option
-                  className="text-base border-0 outline-none text-black"
-                  value={item}
-                >
-                  {item}
-                </option>
+            <div className="flex justify-between">
+              <select
+                className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
+                onChange={categoryChange}
+              >
+                {categories.map((item) => (
+                  <option
+                    className="text-base border-0 outline-none text-black"
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+
+              </select>
+            </div>
+            <ul>
+              {category.map((item) => (
+                <li key={item.id} onClick={() => deleteCategory(item)}>{item}</li>
               ))}
-            </select>
+            </ul>
           </div>
 
           <div>
@@ -175,32 +210,92 @@ function CreateRecipe() {
               <div class="fixed z-5 top-0 left-0 w-full h-full bg-black bg-opacity-40">
                 <div class="bg-white w-2/5 mx-auto mt-32 rounded-md border border-gray-300">
                   <span
-                    class="text-gray-500 text-right text-2xl block cursor-pointer p-4"
+                    className="text-gray-500 text-right text-2xl block cursor-pointer p-4"
                     onClick={() => setIngredientModal(!ingredientModal)}
                   >
                     ×
                   </span>
                   <div class="p-2 flex flex-col items-center justify-center">
                     <form onSubmit={(e) => submitIngredient(e)}>
-                    <input className="w-full mb-4 p-2" type="text" placeholder="Type ingredient and quantity here!" value={newIngredient} onChange={(e) => setNewIngredient(e.target.value)}/>
-                    <button className="bg-red-500 text-white font-bold p-2 rounded-full w-20 outline-none" type="submit">Submit</button>
+                      <input
+                        className="w-full mb-4 p-2"
+                        type="text"
+                        placeholder="Type ingredient and quantity here!"
+                        value={newIngredient}
+                        onChange={(e) => setNewIngredient(e.target.value)}
+                      />
+                      <button
+                        className="bg-red-500 text-white font-bold p-2 rounded-full w-20 outline-none"
+                        type="submit"
+                      >
+                        Submit
+                      </button>
                     </form>
                   </div>
                 </div>
               </div>
             )}
             <div>
-              {ingredients && ingredients.map((item) => (
-                  <li className="cursor-pointer" key={item.id} onClick={() => handleTodoDelete(ingredients.id)}>
+              {ingredients &&
+                ingredients.map((item) => (
+                  <li
+                    className="cursor-pointer"
+                    key={item.id}
+                    onClick={() => deleteIngredient(item.text)}
+                  >
                     {item.text}
                   </li>
-                )
-              )}
+                ))}
             </div>
           </div>
 
-          <div>
+          <div className="flex justify-between pr-4 items-center">
             <h2 className="font-bold text-2xl mb-2">Instructions</h2>
+            <PlusIcon
+              className="h-8 w-8 lg:h-6 lg:w-6 mr-2 bg-black text-white rounded-lg"
+              onClick={() => setInstructionModal(!instructionModal)}
+            />
+          </div>
+          {instructionModal && (
+            <div class="fixed z-5 top-0 left-0 w-full h-full bg-black bg-opacity-40">
+              <div class="bg-white w-4/5 mx-auto mt-32 rounded-md border border-gray-300">
+                <span
+                  class="text-gray-500 text-right text-2xl block cursor-pointer p-4"
+                  onClick={() => setInstructionModal(!instructionModal)}
+                >
+                  ×
+                </span>
+                <div class="p-2 flex flex-col items-center justify-center">
+                  <form onSubmit={(e) => submitInstruction(e)}>
+                    <textarea
+                      className="w-full mb-4 p-2"
+                      type="text"
+                      placeholder="List instructions here! List one instruction at a time!!"
+                      value={newInstructions}
+                      onChange={(e) => setNewInstructions(e.target.value)}
+                    />
+                    <button
+                      className="bg-red-500 text-white font-bold p-2 rounded-full w-20 outline-none"
+                      type="submit"
+                    >
+                      Submit
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+          <div>
+            {instructions &&
+              instructions.map((item) => (
+                <ol
+                  className="cursor-pointer"
+                  key={item.id}
+                  onClick={() => deleteInstruction(item.id)}
+                >
+                  <li className="m-4">{item.text}</li>
+                </ol>
+              ))}
           </div>
           <div className="flex flex-col">
             <div className="flex justify-end items-end mt-5">
@@ -220,3 +315,4 @@ function CreateRecipe() {
 }
 
 export default CreateRecipe;
+
