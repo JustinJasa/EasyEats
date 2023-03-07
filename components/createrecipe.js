@@ -12,6 +12,7 @@ function CreateRecipe() {
   const [category, setCategory] = useState([]);
   const [imageAsset, setImageAsset] = useState();
   const [wrongImageType, setWrongImageType] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [user, setUser] = useState(false);
   const [ingredientModal, setIngredientModal] = useState(false);
   const [instructionModal, setInstructionModal] = useState(false);
@@ -19,11 +20,6 @@ function CreateRecipe() {
   const [newIngredient, setNewIngredient] = useState([]);
   const [instructions, setIntructions] = useState([]);
   const [newInstructions, setNewInstructions] = useState([]);
-
-  let images = [];
-
-  console.log(category);
-  console.log(setCategory);
 
   let categories = [
     "Recommended",
@@ -51,8 +47,19 @@ function CreateRecipe() {
     console.log("hi");
   };
 
-  const uploadImage = () => {
-    console.log("hi");
+  const uploadImage = (e) => {
+    const selectedFiles = e.target.files;
+    const selectedFilesArray = Array.from(selectedFiles);
+    console.log(selectedFilesArray);
+
+    const imagesArray = selectedFilesArray.map((file) => {
+      return URL.createObjectURL(file);
+    });
+
+    setSelectedImages(imagesArray);
+    console.log(selectedImages);
+    // FOR BUG IN CHROME
+    e.target.value = "";
   };
 
   const submitIngredient = (e) => {
@@ -78,18 +85,21 @@ function CreateRecipe() {
     );
   };
 
+  const deleteImage = (image) => { 
+    setSelectedImages(selectedImages.filter((e) => e !== image));
+    URL.revokeObjectURL(image);
+  }
+
   const categoryChange = (e) => {
     const { value } = e.target;
     setCategory((prevSelectedOptions) => [...prevSelectedOptions, value]);
   };
 
-  const deleteCategory = (value) => { 
-    console.log(value)
-    console.log(category.value)
-    setCategory(
-      category.filter((category) => category !== value)
-    )
-  }
+  const deleteCategory = (value) => {
+    console.log(value);
+    console.log(category.value);
+    setCategory(category.filter((category) => category !== value));
+  };
 
   const deleteInstruction = (id) => {
     setIntructions(
@@ -100,7 +110,7 @@ function CreateRecipe() {
   return (
     <div className="flex flex-col justify-center items-center lg:ml-20">
       {fields && (
-        <p className="text-red-500 mb-5 text-xl transition-all duration-150 ease-in ">
+        <p className="text-red-500 mb-5 text-xl transition-all duration-150 ease-in">
           Please add all fields.
         </p>
       )}
@@ -111,45 +121,37 @@ function CreateRecipe() {
         </h4>
         <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
           <div className=" flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420">
-            {loading && <Spinner />}
-            {wrongImageType && <p>It&apos;s wrong file type.</p>}
-            {!imageAsset ? (
-              // eslint-disable-next-line jsx-a11y/label-has-associated-control
-              <label className="cursor-pointer">
-                <div className="flex flex-col items-center justify-center h-full ">
-                  <div className="flex flex-col justify-center items-center">
-                    <ArrowUpOnSquareIcon className="text-black h-8 w-8" />
-                    <p className="text-lg">Click to upload</p>
-                  </div>
-
-                  <p className="mt-32 text-gray-400">
-                    Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF or
-                    TIFF less than 20MB
-                  </p>
-                </div>
-                <input
-                  type="file"
-                  name="upload-image"
-                  onChange={uploadImage}
-                  className="w-0 h-0"
-                />
-              </label>
-            ) : (
-              <div className="relative h-full">
-                <img
-                  src={imageAsset?.url}
-                  alt="uploaded-pic"
-                  className="h-full w-full"
-                />
-                <button
-                  type="button"
-                  className="absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
-                  onClick={() => setImageAsset(null)}
-                >
-                  <TrashIcon />
-                </button>
-              </div>
+            {wrongImageType && (
+              <p className="text-red-700">It&apos;s wrong file type.</p>
             )}
+            <label className="cursor-pointer">
+              <div className="flex flex-col items-center justify-center h-full ">
+                <div className="flex flex-col justify-center items-center">
+                  <ArrowUpOnSquareIcon className="text-black h-8 w-8" />
+                  <p className="text-lg">Click to upload images.</p>
+                </div>
+
+                <p className="mt-32 text-gray-400">
+                  Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF or
+                  TIFF less than 20MB
+                </p>
+              </div>
+              <input
+                type="file"
+                name="upload-image"
+                onChange={uploadImage}
+                className="w-0 h-0"
+                multiple
+                accept="image/png , image/jpeg, image/webp, image/gif, image/tiff, image/jpg"
+              />
+            </label>
+            <h2>Your Images</h2>
+            {selectedImages &&
+              selectedImages.map((image, index) => (
+                <div key={index}>
+                  <img src={image} alt={"user images"} onClick={() => deleteImage(image)}/>
+                </div>
+              ))}
           </div>
         </div>
 
@@ -184,16 +186,18 @@ function CreateRecipe() {
                   <option
                     className="text-base border-0 outline-none text-black"
                     value={item}
+                    key={item}
                   >
                     {item}
                   </option>
                 ))}
-
               </select>
             </div>
             <ul>
               {category.map((item) => (
-                <li key={item.id} onClick={() => deleteCategory(item)}>{item}</li>
+                <li key={item.id} onClick={() => deleteCategory(item)}>
+                  {item}
+                </li>
               ))}
             </ul>
           </div>
@@ -315,4 +319,3 @@ function CreateRecipe() {
 }
 
 export default CreateRecipe;
-

@@ -1,6 +1,7 @@
 import React from "react";
 
 function Pin({ pin, index }) {
+
   return (
     <div key={index} className="align-center content-center h-fit p-4">
       <img className="rounded-2xl" src={pin.image} alt="Main pin image"></img>
