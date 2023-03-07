@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowUpOnSquareIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Spinner from "./spinner";
 
 function CreateRecipe() {
+  const [selectedImages, setSelectedImages] = useState([]);
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+  const [instructions, setInstructions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [destination, setDestination] = useState();
   const [fields, setFields] = useState(false);
-  const [category, setCategory] = useState([]);
   const [imageAsset, setImageAsset] = useState();
   const [wrongImageType, setWrongImageType] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]);
   const [user, setUser] = useState(false);
   const [ingredientModal, setIngredientModal] = useState(false);
   const [instructionModal, setInstructionModal] = useState(false);
-  const [ingredients, setIngredients] = useState([]);
   const [newIngredient, setNewIngredient] = useState([]);
-  const [instructions, setIntructions] = useState([]);
   const [newInstructions, setNewInstructions] = useState([]);
 
   let categories = [
@@ -43,9 +43,32 @@ function CreateRecipe() {
     "Non-Spicy",
   ];
 
-  const savePin = () => {
-    console.log("hi");
+
+
+  const saveRecipe = () => {
+    const recipe = {
+      selectedImages,
+      title,
+      category,
+      ingredients,
+      instructions,
+    };
+    localStorage.setItem("recipe", JSON.stringify(recipe));
   };
+
+
+  useEffect(() => {
+    const savedRecipe = localStorage.getItem("recipe");
+    if (savedRecipe) {
+      const parsedRecipe = JSON.parse(savedRecipe);
+      setSelectedImages(parsedRecipe.selectedImages)
+      setTitle(parsedRecipe.title);
+      setCategory(parsedRecipe.category)
+      setIngredients(parsedRecipe.ingredients);
+      setInstructions(parsedRecipe.instructions);
+    }
+  }, []);
+
 
   const uploadImage = (e) => {
     const selectedFiles = e.target.files;
@@ -72,7 +95,7 @@ function CreateRecipe() {
   const submitInstruction = (e) => {
     e.preventDefault();
     if (!newInstructions) return;
-    setIntructions([
+    setInstructions([
       ...instructions,
       { id: Date.now(), text: newInstructions },
     ]);
@@ -102,7 +125,7 @@ function CreateRecipe() {
   };
 
   const deleteInstruction = (id) => {
-    setIntructions(
+    setInstructions(
       instructions.filter((instructions) => instructions.id !== id)
     );
   };
@@ -305,7 +328,7 @@ function CreateRecipe() {
             <div className="flex justify-end items-end mt-5">
               <button
                 type="button"
-                onClick={savePin}
+                onClick={saveRecipe}
                 className="bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none"
               >
                 Save Recipe
