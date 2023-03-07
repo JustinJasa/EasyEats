@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowUpOnSquareIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import axios from 'axios'
 import Spinner from "./spinner";
 
 function CreateRecipe() {
@@ -45,7 +46,7 @@ function CreateRecipe() {
 
 
 
-  const saveRecipe = () => {
+  const saveRecipe = async () => {
     const recipe = {
       selectedImages,
       title,
@@ -54,6 +55,14 @@ function CreateRecipe() {
       instructions,
     };
     localStorage.setItem("recipe", JSON.stringify(recipe));
+
+    try {
+      const response = await axios.post('http://localhost:8000/recipe', recipe);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+
   };
 
 
