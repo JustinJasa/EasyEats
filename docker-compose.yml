@@ -1,0 +1,13 @@
+version: "3"
+services:
+  easy_eats_frontend:
+    container_name: easy_eats_frontend
+    build: .
+    ports:
+      - "3000:3000" 
+    networks:
+      - appnet
+
+networks: 
+  appnet: 
+    driver: bridge
