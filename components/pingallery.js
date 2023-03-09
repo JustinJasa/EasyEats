@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Pin from "./pin";
+import Masonry from "react-masonry-css";
 
 let pins = [
   {
@@ -152,22 +153,30 @@ let pins = [
   },
 ];
 
+const breakpointColumnsObj = {
+  default: 4,
+  1200: 3,
+  1000: 2,
+  500: 1,
+};
+
+
 function PinGallery() {
   // hardcoding id for now
   let id = 1;
 
   return (
-    <div className="lg:grid lg:grid-cols-3 md:grid-col-3 sm:flex sm:flex-col auto-rows-auto auto-cols-auto mt-12 self-center gap-16 sm:flex sm:flex-col">
-      {pins.map((pin, index) => {
-        return (
+    <>
+      <Masonry className="flex animate-slide-fwd" breakpointCols={breakpointColumnsObj}>
+        {pins.map((pin, index) => (
           <>
             <Link href={`/recipe/${encodeURIComponent(id)}`}>
-              <Pin pin={pin} />
+              <Pin pin={pin} className="w-max" />
             </Link>
           </>
-        );
-      })}
-    </div>
+        ))}
+      </Masonry>
+    </>
   );
 }
 
