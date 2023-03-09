@@ -1,7 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import ImageCarousel from "./imagecarousel";
+import Comments from "./comments";
 
 export default function Recipe({ recipeId }) {
+
+  const [commentModal, setCommentModal] = useState(false)
+  const [isShowing, setIsShowing] = useState(false)
+
+
+  const toggleComments = () => { 
+    setCommentModal(!commentModal)
+    setIsShowing(!isShowing)
+  }
+
   // Hardcoded data
   const recipe = {
     date: "Jan 9, 2023",
@@ -106,10 +117,11 @@ export default function Recipe({ recipeId }) {
           <button className="border-2 bg-green-600 rounded-full font-semibold text-white px-12 py-2 my-2">
             Likes
           </button>
-          <button className="border-2 bg-green-600 rounded-full font-semibold text-white px-12 py-2 my-2">
+          <button className="border-2 bg-green-600 rounded-full font-semibold text-white px-12 py-2 my-2 cursor-pointer" onClick={toggleComments}>
             Comments
           </button>
         </div>
+        {commentModal && <Comments toggleModal={toggleComments} isShowing={isShowing} setIsShowing={setIsShowing}/>}
       </div>
     </div>
   );
