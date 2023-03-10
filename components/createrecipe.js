@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ArrowUpOnSquareIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import axios from 'axios'
+import axios from "axios";
 import Spinner from "./spinner";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 function CreateRecipe() {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -21,6 +22,9 @@ function CreateRecipe() {
   const [instructionModal, setInstructionModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState([]);
   const [newInstructions, setNewInstructions] = useState([]);
+
+  const [parent, enableAnimations] = useAutoAnimate()
+
 
   let categories = [
     "Recommended",
@@ -44,8 +48,6 @@ function CreateRecipe() {
     "Non-Spicy",
   ];
 
-
-
   const saveRecipe = async () => {
     const recipe = {
       selectedImages,
@@ -57,27 +59,25 @@ function CreateRecipe() {
     localStorage.setItem("recipe", JSON.stringify(recipe));
 
     try {
-      const response = await axios.post('http://localhost:8000/recipe', recipe);
+      const response = await axios.post("http://localhost:8000/recipe", recipe);
       console.log(response.data);
     } catch (error) {
       console.error(error);
     }
-
   };
 
-
-  useEffect(() => {
-    const savedRecipe = localStorage.getItem("recipe");
-    if (savedRecipe) {
-      const parsedRecipe = JSON.parse(savedRecipe);
-      setSelectedImages(parsedRecipe.selectedImages)
-      setTitle(parsedRecipe.title);
-      setCategory(parsedRecipe.category)
-      setIngredients(parsedRecipe.ingredients);
-      setInstructions(parsedRecipe.instructions);
-    }
-  }, []);
-
+  // useEffect(() => {
+  //   // saves data on to webs local storage
+  //   const savedRecipe = localStorage.getItem("recipe");
+  //   if (savedRecipe) {
+  //     const parsedRecipe = JSON.parse(savedRecipe);
+  //     setSelectedImages(parsedRecipe.selectedImages);
+  //     setTitle(parsedRecipe.title);
+  //     setCategory(parsedRecipe.category);
+  //     setIngredients(parsedRecipe.ingredients);
+  //     setInstructions(parsedRecipe.instructions);
+  //   }
+  // }, []);
 
   const uploadImage = (e) => {
     const selectedFiles = e.target.files;
@@ -117,10 +117,10 @@ function CreateRecipe() {
     );
   };
 
-  const deleteImage = (image) => { 
+  const deleteImage = (image) => {
     setSelectedImages(selectedImages.filter((e) => e !== image));
     URL.revokeObjectURL(image);
-  }
+  };
 
   const categoryChange = (e) => {
     const { value } = e.target;
@@ -140,7 +140,7 @@ function CreateRecipe() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center lg:ml-20">
+    <div className="flex flex-col justify-center items-center lg:ml-20" >
       {fields && (
         <p className="text-red-500 mb-5 text-xl transition-all duration-150 ease-in">
           Please add all fields.
@@ -181,7 +181,11 @@ function CreateRecipe() {
             {selectedImages &&
               selectedImages.map((image, index) => (
                 <div key={index}>
-                  <img src={image} alt={"user images"} onClick={() => deleteImage(image)}/>
+                  <img
+                    src={image}
+                    alt={"user images"}
+                    onClick={() => deleteImage(image)}
+                  />
                 </div>
               ))}
           </div>
@@ -212,11 +216,11 @@ function CreateRecipe() {
             <div className="flex justify-between">
               <select
                 className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
-                onChange={categoryChange}
+                onChange={categoryChange} 
               >
                 {categories.map((item) => (
-                  <option
-                    className="text-base border-0 outline-none text-black"
+                  <option 
+                    className="text-base border-0 outline-none text-black cursor-pointer"
                     value={item}
                     key={item}
                   >
@@ -225,7 +229,7 @@ function CreateRecipe() {
                 ))}
               </select>
             </div>
-            <ul>
+            <ul ref={parent}>
               {category.map((item) => (
                 <li key={item.id} onClick={() => deleteCategory(item)}>
                   {item}
@@ -243,15 +247,15 @@ function CreateRecipe() {
               />
             </div>
             {ingredientModal && (
-              <div class="fixed z-5 top-0 left-0 w-full h-full bg-black bg-opacity-40">
-                <div class="bg-white w-2/5 mx-auto mt-32 rounded-md border border-gray-300">
+              <div className="fixed z-5 top-0 left-0 w-full h-full bg-black bg-opacity-40">
+                <div className="bg-white w-2/5 mx-auto mt-32 rounded-md border border-gray-300">
                   <span
                     className="text-gray-500 text-right text-2xl block cursor-pointer p-4"
                     onClick={() => setIngredientModal(!ingredientModal)}
                   >
                     ×
                   </span>
-                  <div class="p-2 flex flex-col items-center justify-center">
+                  <div className="p-2 flex flex-col items-center justify-center">
                     <form onSubmit={(e) => submitIngredient(e)}>
                       <input
                         className="w-full mb-4 p-2"
@@ -271,16 +275,18 @@ function CreateRecipe() {
                 </div>
               </div>
             )}
-            <div>
+            <div  ref={parent}>
               {ingredients &&
                 ingredients.map((item) => (
-                  <li
-                    className="cursor-pointer"
-                    key={item.id}
-                    onClick={() => deleteIngredient(item.text)}
-                  >
-                    {item.text}
-                  </li>
+                  <div className="bg-indigo-500"> 
+                    <li
+                      className="cursor-pointer m-4"
+                      key={item.id}
+                      onClick={() => deleteIngredient(item.text)}
+                    >
+                      {item.text}
+                    </li>
+                  </div>
                 ))}
             </div>
           </div>
@@ -293,15 +299,15 @@ function CreateRecipe() {
             />
           </div>
           {instructionModal && (
-            <div class="fixed z-5 top-0 left-0 w-full h-full bg-black bg-opacity-40">
-              <div class="bg-white w-4/5 mx-auto mt-32 rounded-md border border-gray-300">
+            <div className="fixed z-5 top-0 left-0 w-full h-full bg-black bg-opacity-40">
+              <div className="bg-white w-4/5 mx-auto mt-32 rounded-md border border-gray-300">
                 <span
-                  class="text-gray-500 text-right text-2xl block cursor-pointer p-4"
+                  className="text-gray-500 text-right text-2xl block cursor-pointer p-4"
                   onClick={() => setInstructionModal(!instructionModal)}
                 >
                   ×
                 </span>
-                <div class="p-2 flex flex-col items-center justify-center">
+                <div className="p-2 flex flex-col items-center justify-center">
                   <form onSubmit={(e) => submitInstruction(e)}>
                     <textarea
                       className="w-full mb-4 p-2"
@@ -321,7 +327,7 @@ function CreateRecipe() {
               </div>
             </div>
           )}
-          <div>
+          <div ref={parent}>
             {instructions &&
               instructions.map((item) => (
                 <ol
