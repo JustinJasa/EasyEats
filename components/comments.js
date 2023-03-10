@@ -3,16 +3,36 @@ import { Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const Comments = ({ toggleModal, isShowing, setIsShowing }) => {
+  {
+  /*
 
-  console.log(isShowing)
+    TODO
 
-  const comments = [
+  - Create post request for new comments into the database
+  */
+  }
+
+  const [comments, setComments] = useState([
     "Great job!",
     "This is really helpful!",
     "I'm impressed!",
     "Thanks for sharing!",
     "You're a lifesaver!",
-  ];
+  ]);
+  const [newComment, setNewComment] = useState("");
+
+  // adding new comment to an array
+  const addNewComment = (e) => {
+    setNewComment(e.target.value);
+  };
+
+  const submitNewComment = (e) => {
+    e.preventDefault();
+    comments.push(newComment);
+    setNewComment("")
+    e.target.reset()
+  };
+
 
   return (
     <>
@@ -41,13 +61,25 @@ const Comments = ({ toggleModal, isShowing, setIsShowing }) => {
                 alt=""
               />
             </div>
-            <input
-              className="w-full p-2 focus:outline-none rounded"
-              placeholder="What are your thoughts?"
-            />
-            <button></button>
-          </div>
+                
+            <form onSubmit={submitNewComment}>
+            <div className="flex">
+              <input
+                className="w-full p-2 mr-2 focus:outline-none rounded shadow-gray shadow-lg"
+                placeholder="What are your thoughts?"
+                onChange={addNewComment}
+              />
+              <button
+                className="bg-black text-white font-bold p-2 rounded-xl"
+                type="submit"
+              >
+                Submit
+              </button>
+            </div>
+            </form>
 
+          </div>
+          <hr />
           {comments.map((comment) => (
             <div>
               <p>{comment}</p>
