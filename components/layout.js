@@ -4,7 +4,7 @@ import { useRouter, UseRouter } from "next/router";
 
 function Layout({ children }) {
   const router = useRouter();
-  const noNav =  ['/login', '/signup'];
+  const noNav =  ['/login', '/signup', '/'];
 
   return (
     <>
