@@ -67,18 +67,18 @@ function CreateRecipe() {
     }
   };
 
-  // useEffect(() => {
-  //   // saves data on to webs local storage
-  //   const savedRecipe = localStorage.getItem("recipe");
-  //   if (savedRecipe) {
-  //     const parsedRecipe = JSON.parse(savedRecipe);
-  //     setSelectedImages(parsedRecipe.selectedImages);
-  //     setTitle(parsedRecipe.title);
-  //     setCategory(parsedRecipe.category);
-  //     setIngredients(parsedRecipe.ingredients);
-  //     setInstructions(parsedRecipe.instructions);
-  //   }
-  // }, []);
+  useEffect(() => {
+    // saves data on to webs local storage
+    const savedRecipe = localStorage.getItem("recipe");
+    if (savedRecipe) {
+      const parsedRecipe = JSON.parse(savedRecipe);
+      setSelectedImages(parsedRecipe.selectedImages);
+      setTitle(parsedRecipe.title);
+      setCategory(parsedRecipe.category);
+      setIngredients(parsedRecipe.ingredients);
+      setInstructions(parsedRecipe.instructions);
+    }
+  }, []);
 
   const uploadImage = (e) => {
     const selectedFiles = e.target.files;
