@@ -6,6 +6,7 @@ import axios from "axios";
 import Spinner from "./spinner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
+
 function CreateRecipe() {
   const [selectedImages, setSelectedImages] = useState([]);
   const [title, setTitle] = useState("");

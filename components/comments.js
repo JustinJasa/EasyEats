@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import CommentComponent from "./comment";
 
 const Comments = ({ toggleModal }) => {
@@ -12,16 +12,11 @@ const Comments = ({ toggleModal }) => {
   */
   }
 
-
-
   const [comments, setComments] = useState([
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,!",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
   ]);
   const [newComment, setNewComment] = useState("");
+  const [parent, enableAnimations] = useAutoAnimate();
 
   // adding new comment to an array
   const addNewComment = (e) => {
@@ -30,7 +25,7 @@ const Comments = ({ toggleModal }) => {
 
   const submitNewComment = (e) => {
     e.preventDefault();
-    setComments([...comments, newComment ])
+    setComments([...comments, newComment]);
     setNewComment("");
     e.target.reset();
   };
@@ -71,10 +66,14 @@ const Comments = ({ toggleModal }) => {
             </div>
           </form>
         </div>
-      
-        {comments && comments.map((comment) => (
-          <CommentComponent comment={comment}/>
-        ))}
+        <div ref={parent}>
+          {comments &&
+            comments.map((comment) => (
+              <div>
+                <CommentComponent comment={comment} />
+              </div>
+            ))}
+        </div>
       </aside>
     </>
   );
