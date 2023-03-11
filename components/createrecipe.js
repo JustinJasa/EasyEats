@@ -278,7 +278,7 @@ function CreateRecipe() {
             <div  ref={parent}>
               {ingredients &&
                 ingredients.map((item) => (
-                  <div className="bg-indigo-500"> 
+                  <div> 
                     <li
                       className="cursor-pointer m-4"
                       key={item.id}
