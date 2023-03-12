@@ -2,181 +2,124 @@
 import axios from "axios";
 
 // GET - All categories
-export const getAllCategories = () => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get("http://localhost:8000/categories")
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getAllCategories = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8000/categories`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - All recipes
-export const getAllRecipes = () => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get("http://localhost:8000/recipes/all")
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getAllRecipes = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/all`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - Recipes by category name
-export const getRecipesByCategoryName = (categoryName) => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/recipes/category/${categoryName}`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getRecipesByCategoryName = async (categoryName) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/category/${categoryName}`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - Recipes by recipe name
-export const getRecipesByRecipeName = (recipeName) => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/recipes/name/${recipeName}`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getRecipesByRecipeName = async (recipeName) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/name/${recipeName}`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - Recipe info by recipeId
-export const getRecipeInfo = (recipeId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/recipes/${recipeId}`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getRecipeInfo = async (recipeId) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/${recipeId}`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - Recipe categories by recipeId
-export const getRecipeCategories = (recipeId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/recipes/${recipeId}/categories`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getRecipeCategories = async (recipeId) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/${recipeId}/categories`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - Recipe ingredients by recipeId
-export const getRecipeIngredients = (recipeId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/recipes/${recipeId}/ingredients`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getRecipeIngredients = async (recipeId) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/${recipeId}/ingredients`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - Recipe steps by recipeId
-export const getRecipeSteps = (recipeId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/recipes/${recipeId}/steps`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getRecipeSteps = async (recipeId) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/${recipeId}/steps`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - All recipe comments by recipeId
-export const getRecipeComments = (recipeId) => {
-  axios
-    .get(`http://localhost:8000/recipes/${recipeId}/comments/all`)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+export const getRecipeComments = async (recipeId) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/${recipeId}/comments/all`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - Recipe comment by recipeId and commentId
-export const getRecipeComment = (recipeId, commentId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/recipes/${recipeId}/comments/${commentId}`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getRecipeComment = async (recipeId, commentId) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/recipes/${recipeId}/comments/${commentId}`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - All users
-export const getAllUsers = () => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/users/all`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getAllUsers = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8000/users/all`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // GET - User by userId
-export const getUser = (userId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-      .get(`http://localhost:8000/users/${userId}`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
+export const getUser = async (userId) => {
+    try {
+        const response = await axios.get(`http://localhost:8000/users/${userId}`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // - - - - - - - - - - - - - - - - - - - -
 // - - - - - - - POST - -  - - - - - - - -
