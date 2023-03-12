@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-
+import Image from 'next/image'
 
 
 
@@ -12,7 +12,6 @@ function Pin({ pin, index }) {
   function getRandomHeight(heights) {
     // generate a random index between 0 and the length of the array minus 1
     const randomIndex = Math.floor(Math.random() * heights.length);
-    console.log(randomIndex)
     // return the element at the random index
     return heights[randomIndex];
   }

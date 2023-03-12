@@ -1,10 +1,11 @@
 import React from "react";
 
 function CommentComponent({ comment }) {
+
   return (
     <>
       <hr />
-      <div className="flex items-center">
+      <div className="flex items-center mt-4">
         <img
           className="h-10 w-10 rounded-full"
           src="https://picsum.photos/20/20"

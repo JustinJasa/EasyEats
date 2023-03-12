@@ -1,4 +1,6 @@
 import React from "react";
+import { Fade } from "react-awesome-reveal";
+
 
 function MobileMenu() {
   let categories = [
@@ -28,7 +30,9 @@ function MobileMenu() {
       {categories.map((category, index) => {
         return (
           <nav key={index} className="flex flex-row">
+            <Fade cascade damping={0.2}>
             <li className="list-none font-bold mr-4 ml-4 whitespace-nowrap bg-gray-500 p-2 rounded-xl text-white :hover">{category}</li>
+            </Fade>
           </nav>
         );
       })}
