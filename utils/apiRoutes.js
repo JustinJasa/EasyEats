@@ -126,278 +126,198 @@ export const getUser = async (userId) => {
 // - - - - - - - - - - - - - - - - - - - -
 
 // POST - Recipe info
-export const postRecipeInfo = (userId, name, description, time_h, time_m, price) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .post("http://localhost:8000/recipes/new", {
-      userId: userId,
-      name: name,
-      description: description,
-      time_h: time_h,
-      time_m: time_m,
-      price: price,
-    })
-    .then((response) => {
-      resolve(response.data)
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const postRecipeInfo = async (userId, name, description, time_h, time_m, price) => {
+    try {
+        const response = await axios.post(`http://localhost:8000/recipes/new`, {
+            userId: userId,
+            name: name,
+            description: description,
+            time_h: time_h,
+            time_m: time_m,
+            price: price
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // POST - Recipe categories
-export const postRecipeCategories = (recipeId, categories) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .post(`http://localhost:8000/recipes/${recipeId}/categories/new`, {
-      categories: categories,
-    })
-    .then((response) => {
-      resolve(response.data)
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const postRecipeCategories = async (recipeId, categories) => {
+    try {
+        const response = await axios.post(`http://localhost:8000/recipes/${recipeId}/categories/new`, {
+            categories: categories
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // POST - Recipe ingredients
-export const postRecipeIngredients = (recipeId, ingredients) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .post(`http://localhost:8000/recipes/${recipeId}/ingredients/new`, {
-      ingredients: ingredients,
-    })
-    .then((response) => {
-      resolve(response.data)
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const postRecipeIngredients = async (recipeId, ingredients) => {
+    try {
+        const response = await axios.post(`http://localhost:8000/recipes/${recipeId}/ingredients/new`, {
+            ingredients: ingredients
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // POST - Recipe steps
-export const postRecipeSteps = (recipeId, steps) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .post(`http://localhost:8000/recipes/${recipeId}/steps/new`, {
-      steps: steps,
-    })
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const postRecipeSteps = async (recipeId, steps) => {
+    try {
+        const response = await axios.post(`http://localhost:8000/recipes/${recipeId}/steps/new`, {
+            steps: steps
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // POST - Comment on a recipe
-export const postRecipeComment = (recipeId, userId, comment, rating) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .post(`http://localhost:8000/recipes/${recipeId}/categories/new`, {
-      userId: userId,
-      comment: comment,
-      rating: rating,
-    })
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const postRecipeComment = async (recipeId, userId, comment, rating) => {
+    try {
+        const response = await axios.post(`http://localhost:8000/recipes/${recipeId}/comments/new`, {
+            cuserId: userId,
+            comment: comment,
+            rating: rating
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // POST - User
-export const postUser = (username, email, password) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .post(`http://localhost:8000/users/new`, {
-      username: username,
-      email: email,
-      password: password,
-    })
-    .then((response) => {
-      resolve(response.data)
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const postUser = async (recipeId, username, email, password) => {
+    try {
+        const response = await axios.post(`http://localhost:8000/users/new`, {
+            username: username,
+            email: email,
+            password: password
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // - - - - - - - - - - - - - - - - - - - -
 // - - - - - - - - PUT - - - - - - - - - -
 // - - - - - - - - - - - - - - - - - - - -
 
 // PUT - Recipe info
-export const putRecipeInfo = (recipeId, name, description, time_h, time_m, price) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .put(`http://localhost:8000/recipes/${recipeId}/edit`, {
-      name: name,
-      description: description,
-      time_h: time_h,
-      time_m: time_m,
-      price: price,
-    })
-    .then((response) => {
-      resolve(response.data)
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const putRecipeInfo = async (recipeId, name, description, time_h, time_m, price) => {
+    try {
+        const response = await axios.put(`http://localhost:8000/recipes/${recipeId}/edit`, {
+            name: name,
+            description: description,
+            time_h: time_h,
+            time_m: time_m,
+            price: price
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // PUT - Recipe categories
-export const putRecipeCategories = (recipeId, categories) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .put(`http://localhost:8000/recipes/${recipeId}/categories/edit`, {
-      categories: categories,
-    })
-    .then((response) => {
-      resolve(response.data)
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const putRecipeCategories = async (recipeId, categories) => {
+    try {
+        const response = await axios.put(`http://localhost:8000/recipes/${recipeId}/categories/edit`, {
+            categories: categories
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // PUT - Recipe ingredients
-export const putRecipeIngredients = (recipeId, ingredients) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .put(`http://localhost:8000/recipes/${recipeId}/ingredients/edit`, {
-      ingredients: ingredients,
-    })
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const putRecipeIngredients = async (recipeId, ingredients) => {
+    try {
+        const response = await axios.put(`http://localhost:8000/recipes/${recipeId}/ingredients/edit`, {
+            ingredients: ingredients
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // PUT - Recipe steps
-export const putRecipeSteps = (recipeId, steps) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .put(`http://localhost:8000/recipes/${recipeId}/steps/edit`, {
-      steps: steps,
-    })
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const putRecipeSteps = async (recipeId, steps) => {
+    try {
+        const response = await axios.put(`http://localhost:8000/recipes/${recipeId}/steps/edit`, {
+            steps: steps
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // PUT - Comment on recipe
-export const putRecipeComment = (recipeId, commentId, comment, rating) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .put(
-      `http://localhost:8000/recipes/${recipeId}/comments/${commentId}/edit`,
-      {
-        comment: comment,
-        rating: rating,
-      }
-    )
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const putRecipeComment = async (recipeId, commentId, comment, rating) => {
+    try {
+        const response = await axios.put(`http://localhost:8000/recipes/${recipeId}/comments/${commentId}/edit`, {
+            comment: comment,
+            rating: rating
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // PUT - User
-export const putUser = (userId, username, password) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .put(`http://localhost:8000/users/${userId}/edit`, {
-      username: username,
-      password: password,
-    })
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const putUser = async (userId, username, password) => {
+    try {
+        const response = await axios.put(`http://localhost:8000/users/${userId}/edit`, {
+            username: username,
+            password: password
+        })
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // - - - - - - - - - - - - - - - - - - - -
 // - - - - - - - - - - - - - - - - - - - -
 // - - - - - - - - - - - - - - - - - - - -
 
 // DELETE - Recipe
-export const deleteRecipe = (recipeId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .delete(`http://localhost:8000/recipes/${recipeId}/delete`)
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const deleteRecipe = async (recipeId) => {
+    try {
+        const response = await axios.delete(`http://localhost:8000/recipes/${recipeId}/delete`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // DELETE - Comment
-export const deleteComment = (recipeId, commentId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .delete(
-      `http://localhost:8000/recipes/${recipeId}/comments/${commentId}/delete`
-    )
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const deleteComment = async (recipeId, commentId) => {
+    try {
+        const response = await axios.delete(`http://localhost:8000/recipes/${recipeId}/comments/${commentId}/delete`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // DELETE - User
-export const deleteUser = (userId) => {
-  return new Promise(function (resolve, reject) {
-    axios
-    .delete(`http://localhost:8000/users/${userId}/delete`)
-    .then((response) => {
-      resolve(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      reject(error)
-    });
-  })
-};
+export const deleteUser = async (userId) => {
+    try {
+        const response = await axios.delete(`http://localhost:8000/users/${userId}/delete`)
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
