@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "./sidebar";
 import MobileMenu from "./mobilemenu";
 import { useMediaQuery } from "@/hooks/hooks";
-import useSWR from "swr";
-import axios from "axios";
 import { getAllCategories } from "@/utils/apiRoutes";
 
 function CategorySelector() {
@@ -12,19 +10,14 @@ function CategorySelector() {
   const [categories, setCategories] = useState([]);
   // console.log(data)
 
-  const fetchCategories = () => {
-    console.log("BEFORE", categories)
-    const apiCall = getAllCategories().then(response => {
-      setCategories(response)
-    })
-
+  const fetchCategories = async () => {
+    const apiCall = await getAllCategories()
     setCategories(apiCall)
   };
 
   useEffect(() => {
     fetchCategories();
   }, []);
-  console.log("AFTER", categories);
 
   const isMobile = useMediaQuery(640);
   //hard coding categories for now

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import ImageCarousel from "./imagecarousel";
 import Comments from "./comments";
-import axios from 'axios'
+import { getRecipeInfo, getRecipeCategories, getRecipeIngredients, getRecipeSteps } from "@/utils/apiRoutes";
 
 export default function Recipe({ recipeId }) {
 
@@ -10,69 +10,46 @@ export default function Recipe({ recipeId }) {
   const [categories, setCategories] = useState([])
   const [ingredients, setIngredients] = useState([])
   const [steps, setSteps] = useState([])
-  const [info, setInfo] = useState([])
+  const [info, setInfo] = useState({recipe_id: 1, name: "Placeholder name", description: "Placeholder description", time_h: 0, time_m: 0, price: "$"})
 
   const toggleComments = () => { 
     setCommentModal(!commentModal)
     setIsShowing(!isShowing)
   }
 
-  const fetchInfo = () => {
-    axios
-      .get("http://localhost:8000/recipes/1")
-      .then((response) => {
-        setInfo(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const fetchInfo = async (rId) => {
+    const response = await getRecipeInfo(rId)
+    setInfo(response[0])
   };
 
-  const fetchCategories = () => {
-    axios
-      .get("http://localhost:8000/recipes/1/categories")
-      .then((response) => {
-        setCategories(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const fetchCategories = async (rId) => {
+    const response = await getRecipeCategories(rId)
+    setCategories(response)
   };
 
-  const fetchIngredients = () => {
-    axios
-    .get("http://localhost:8000/recipes/1/ingredients")
-    .then((response) => {
-      setIngredients(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const fetchIngredients = async (rId) => {
+    const response = await getRecipeIngredients(rId)
+    setIngredients(response)
   }
 
-  const fetchSteps = () => {
-    axios
-    .get("http://localhost:8000/recipes/1/steps")
-    .then((response) => {
-      setSteps(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const fetchSteps = async (rId) => {
+    const response = await getRecipeSteps(rId)
+    setSteps(response)
   }
 
 
   useEffect(() => {
-    fetchInfo();
-    fetchCategories();
-    fetchIngredients();
-    fetchSteps();
+    fetchInfo(1);
+    fetchCategories(1);
+    fetchIngredients(1);
+    fetchSteps(1);
   }, []);
 
-  // console.log(steps)
-  // console.log(ingredients)
-  // console.log(categories)
-  console.log(info)
+  // console.log("INFO", info)
+  // console.log("CATEGORIES", categories)
+  // console.log("INGREDIENTS", ingredients)
+  // console.log("STEPS", steps)
+
 
 
   // Hardcoded data
@@ -123,7 +100,7 @@ export default function Recipe({ recipeId }) {
       <div className="h-screen flex flex-col">
         <h4 className="text-center">{recipe.date}</h4>
         <h2 className="text-6xl font-serif font-bold mb-4 mt-4 text-center">
-          {`${info[0].name}.`}
+          {`${info.name}.`}
         </h2>
         <p className="text-xl font-semibold text-center mb-2">
           <span className="text-sm italic">{recipe.creator}</span>
