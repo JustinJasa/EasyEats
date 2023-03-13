@@ -182,7 +182,7 @@ export const postRecipeSteps = async (recipeId, steps) => {
 export const postRecipeComment = async (recipeId, userId, comment, rating) => {
     try {
         const response = await axios.post(`http://localhost:8000/recipes/${recipeId}/comments/new`, {
-            cuserId: userId,
+            userId: userId,
             comment: comment,
             rating: rating
         })

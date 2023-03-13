@@ -39,10 +39,10 @@ export default function Recipe({ recipeId }) {
 
 
   useEffect(() => {
-    fetchInfo(1);
-    fetchCategories(1);
-    fetchIngredients(1);
-    fetchSteps(1);
+    fetchInfo(2);
+    fetchCategories(2);
+    fetchIngredients(2);
+    fetchSteps(2);
   }, []);
 
   // console.log("INFO", info)

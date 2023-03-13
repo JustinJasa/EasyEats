@@ -4,10 +4,7 @@ import Link from "next/link";
 function Sidebar({ categories }) {
   return (
     <>
-    
-
-
-
+  
       <aside className="h-full w-48  fixed overflow-scroll">
         <img
           className="w-32 h-32 m-auto"
