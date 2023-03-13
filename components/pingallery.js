@@ -3,6 +3,7 @@ import Link from "next/link";
 import Pin from "./pin";
 import Masonry from "react-masonry-css";
 import { Fade } from "react-awesome-reveal";
+import { getRecipeInfo, getRecipeCategories, getRecipeIngredients, getRecipeSteps } from "@/utils/apiRoutes";
 
 let pins = [
   {

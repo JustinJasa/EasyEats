@@ -1,6 +1,7 @@
 import React from "react";
 
-function CommentComponent({ comment }) {
+function CommentComponent({ comment, username }) {
+
 
   return (
     <>
@@ -12,7 +13,7 @@ function CommentComponent({ comment }) {
           alt=""
         />
         <div className="flex flex-col ml-2">
-        <h4 className="font-bold">Justin</h4>
+        <h4 className="font-bold">{username}</h4>
         <p className="italic text-slate-500 text-sm">6/2/2023</p>
         </div>
       </div>

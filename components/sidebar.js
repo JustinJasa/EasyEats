@@ -4,6 +4,7 @@ import Link from "next/link";
 function Sidebar({ categories }) {
   return (
     <>
+  
       <aside className="h-full w-48  fixed overflow-scroll">
         <img
           className="w-32 h-32 m-auto"
@@ -20,7 +21,7 @@ function Sidebar({ categories }) {
                 return (
                   // <Link href={`${category}`}> This will be put in later on
                   <li className="pb pt-2 cursor-pointer italic text-gray-500" key={index}>
-                    {category}
+                    {category.name}
                   </li>
                   // </Link>
                 );
