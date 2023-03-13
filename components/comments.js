@@ -22,9 +22,15 @@ const Comments = ({ toggleModal }) => {
   }
 
   const createComment = async (e) => {
-    e.preventDefault()
-    await postRecipeComment(1,1, newComment, 5)
-    e.target.reset()
+    try{
+      e.preventDefault()
+      await postRecipeComment(2,1, newComment, 5)
+      e.target.reset()
+      const newResponse = await getRecipeComments(2)
+      setCommentInfo(newResponse)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect (() => { 
