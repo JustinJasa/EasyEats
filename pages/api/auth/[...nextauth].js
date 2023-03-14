@@ -1,5 +1,9 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+
+const client_id = "500055942632-6fpg1q7buicoaham04jdpemrkpn2akr2.apps.googleusercontent.com"
+const client_secret = "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"
 
 const authOptions = {
   session: {
@@ -26,6 +30,11 @@ const authOptions = {
         };
       },
     }),
+    // Google provider
+    GoogleProvider({
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET
+    })
   ],
   pages: {
     signIn: "/auth/login",

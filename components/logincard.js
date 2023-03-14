@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Link from "next/link";
 import { FaGoogle, FaRegEnvelope, FaKey } from "react-icons/fa";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 
 export default function LoginCard() {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
@@ -17,6 +17,13 @@ export default function LoginCard() {
 
     console.log(res);
   };
+
+  //google handler 
+  const handleGoogleSignIn = async () => {
+    signIn('google', {
+      callbackUrl:"http://localhost:3000"
+    })
+  }
 
   return (
     <form onSubmit={logIn}>
@@ -61,9 +68,9 @@ export default function LoginCard() {
 
         <p>Or log in with Google</p>
         <div className="flex justify-center my-2">
-          <a className="border-2 border-gray-200 rounded-full p-3 mx-1">
+          <button onClick={handleGoogleSignIn} className="border-2 border-gray-200 rounded-full p-3 mx-1">
             <FaGoogle className="text-sm" />
-          </a>
+          </button>
         </div>
 
         <p>
