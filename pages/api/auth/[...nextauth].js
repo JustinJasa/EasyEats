@@ -15,7 +15,7 @@ const authOptions = {
       credentials: {},
       authorize(credentials, req) {
         const { email, password } = credentials 
-        // perform you login logic
+        // perform your login logic
         // find out user from db
         if (email !== "john@gmail.com" || password !== "1234") {
           throw new Error("invalid credentials");

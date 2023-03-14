@@ -1,5 +1,5 @@
 import LoginCard from '@/components/logincard'
-import loginImg from '../../public/loginImg.jpg'
+import loginImg from '../public/loginImg.jpg'
 
 export default function Login() {
     return(
