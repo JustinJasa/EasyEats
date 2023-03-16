@@ -3,17 +3,11 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-
+import {useSession, getSession} from 'next-auth/react'
 
 function Mainbar({session}) {
-  const [user, setUser] = useState(false);
 
-  session && console.log(session.user.name)
-
-  session && console.log(session.user.email)
-
-  session && console.log(session.user.image)
-  // console.log(session.user.email)
+  console.log(session.user.account[0].username)
 
   const handleSignOut = () => {
     signOut({callbackUrl: "http://localhost:3000"})
@@ -34,8 +28,9 @@ function Mainbar({session}) {
           </div>
         </Link>
         {session ? (
-          <div className="w-10 h-10">
-            <img src={session.user.image} alt="" onClick={handleSignOut}/>
+          <div className="w-10 h-10 flex items-center mr-4">
+            <p>{session.user.account[0].username}</p>
+            {/* <img src={session.user.image} alt="" onClick={handleSignOut}/> */}
           </div>
         ) : (
           <Link href={`login`}>
@@ -45,6 +40,7 @@ function Mainbar({session}) {
             </div>
           </Link>
         )}
+        <button onClick={handleSignOut}>Sign Out</button>
       </div>
     </div>
   );

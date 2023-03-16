@@ -2,10 +2,40 @@ import React from "react";
 import { FaRegEnvelope, FaKey, FaUser } from "react-icons/fa";
 import { useFormik } from "formik";
 import { ValidateSignUp } from "@/lib/validateForms";
+import { useRouter } from "next/router";
+import axios from "axios";
+
+
+const register = async (username, email, password) => {
+  try {
+      const response = await axios.post(`http://localhost:8000/auth/signup`, {
+          username: username,
+          email: email,
+          password: password
+      })
+      console.log(response)
+      return response.data
+  } catch(error) {
+      console.log(error)
+  }
+}
 
 export default function SignUpCard() {
+
+  const router = useRouter()
+
   const signUp = async (values) => {
-    console.log(values);
+    const {username, email, password} = values
+    const res = await register(username, email, password)
+
+    console.log(res)
+
+    if(!res){
+      throw new Error("Could not register account. Try Again!")
+    }
+
+    router.push("http://localhost:3000/login")
+
   };
 
   const formik = useFormik({

@@ -1,9 +1,21 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import axios from "axios";
 
-const client_id = "500055942632-6fpg1q7buicoaham04jdpemrkpn2akr2.apps.googleusercontent.com"
-const client_secret = "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"
+
+const login = async (email, password) => {
+  try {
+      const response = await axios.post(`http://localhost:8000/auth/login`, {
+          email: email,
+          password: password
+      })
+      console.log(response)
+      return response.data
+  } catch(error) {
+      console.log(error)
+  }
+}
 
 const authOptions = {
   session: {
@@ -13,21 +25,19 @@ const authOptions = {
     CredentialsProvider({
       type: "credentials",
       credentials: {},
-      authorize(credentials, req) {
+      async authorize(credentials, req) {
         const { email, password } = credentials 
         // perform your login logic
         // find out user from db
-        if (email !== "john@gmail.com" || password !== "1234") {
-          throw new Error("invalid credentials");
+        const user = await login(email, password)
+        // if no user
+        if(!user){
+          throw new Error("No user found. Please Sign Up!")
         }
 
-        // if everything is fine
-        return {
-          id: "1234",
-          name: "John Doe",
-          email: "john@gmail.com",
-          role: "admin",
-        };
+        // if everything is fine - what is being returned here is wrong
+        return user
+          
       },
     }),
     // Google provider
@@ -42,14 +52,13 @@ const authOptions = {
     // signOut: '/auth/signout'
   },
   callbacks: {
-    jwt(params) {
-      // update token
-      if (params.user?.role) {
-        params.token.role = params.user.role;
-      }
-      // return final_token
-      return params.token;
+    async jwt({token, user}) {
+      return {...token, ...user};
     },
+    async session ({session, token, user}){
+      session.user = token
+      return session
+    }
   },
 };
 

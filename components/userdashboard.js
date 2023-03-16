@@ -6,10 +6,8 @@ import { useMediaQuery } from '@/hooks/hooks'
 import { useSession } from "next-auth/react";
 
 
-function UserDashboard() {
+function UserDashboard({session}) {
   let isMobile = useMediaQuery(640)
-
-  const { data: session} = useSession()  
 
   console.log(session)
 

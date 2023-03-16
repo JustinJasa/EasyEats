@@ -4,21 +4,31 @@ import { FaGoogle, FaRegEnvelope, FaKey } from "react-icons/fa";
 import { signIn, signOut } from "next-auth/react";
 import {useFormik} from 'formik'
 import { ValidateLogin } from "@/lib/validateForms";
+import { useRouter } from "next/router";
 
 export default function LoginCard() {
-  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+
+
+  const router = useRouter()
 
   const logIn = async (values) => {
 
-    console.log(values)
+    /*
+    "test@gmail.com"
+    "12345"
+    */
 
     const res = await signIn("credentials", {
-      email: userInfo.email,
-      password: userInfo.password,
+      email: values.email,
+      password: values.password,
       redirect: false,
+      callbackUrl:"http://localhost:3000/main"
     });
 
     console.log(res);
+
+    if(res.ok) router.push(res.url)
+
 
   };
 
