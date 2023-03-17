@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { UserIcon } from "@heroicons/react/24/outline";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { UserIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import {useSession, getSession} from 'next-auth/react'
 
 function Mainbar({session}) {
 
-  console.log(session.user.account[0].username)
+  // console.log(session.user.account[0].username)
+
+  console.log(session)
 
   const handleSignOut = () => {
     signOut({callbackUrl: "http://localhost:3000"})
   }
 
   return (
-    <div className="flex flex-row justify-end md:p-6 p-4">
+    <div className="flex flex-row justify-end md:p-6 ">
       <input
         type="text"
         placeholder="Search Here!"
@@ -27,20 +27,15 @@ function Mainbar({session}) {
             <p className="hidden sm:block">Create Receipe</p>
           </div>
         </Link>
-        {session ? (
-          <div className="w-10 h-10 flex items-center mr-4">
-            <p>{session.user.account[0].username}</p>
+        {session && (
+          <Link href={`/users/${session.user.account[0].username}`}>
+          <div className="flex bg-green-600 justify-center items-center mr-4 rounded-lg p-2 text-white">
+            <UserIcon className="h-8 w-8 sm:h-4 sm:w-4 mr-2" />
+            <p className="hidden sm:block">{session.user.account[0].username}</p>
             {/* <img src={session.user.image} alt="" onClick={handleSignOut}/> */}
           </div>
-        ) : (
-          <Link href={`login`}>
-            <div className="flex items-center bg-green-600 text-white p-2 rounded-lg">
-              <UserIcon className="h-8 w-8 sm:h-4 sm:w-4 mr-2" />
-              <button className="hidden sm:block">Sign In</button>
-            </div>
           </Link>
         )}
-        <button onClick={handleSignOut}>Sign Out</button>
       </div>
     </div>
   );
