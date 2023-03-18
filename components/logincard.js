@@ -13,19 +13,12 @@ export default function LoginCard() {
 
   const logIn = async (values) => {
 
-    /*
-    "test@gmail.com"
-    "12345"
-    */
-
     const res = await signIn("credentials", {
       email: values.email,
       password: values.password,
       redirect: false,
       callbackUrl:"http://localhost:3000/main"
     });
-
-    console.log(res);
 
     if(res.ok) router.push(res.url)
 

@@ -1,17 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+
 
 function Mainbar({session}) {
-
-  // console.log(session.user.account[0].username)
-
-  console.log(session)
-
-  const handleSignOut = () => {
-    signOut({callbackUrl: "http://localhost:3000"})
-  }
+ 
 
   return (
     <div className="flex flex-row justify-end md:p-6 ">
