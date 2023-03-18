@@ -13,7 +13,6 @@ const register = async (username, email, password) => {
           email: email,
           password: password
       })
-      console.log(response)
       return response.data
   } catch(error) {
       console.log(error)
@@ -28,7 +27,6 @@ export default function SignUpCard() {
     const {username, email, password} = values
     const res = await register(username, email, password)
 
-    console.log(res)
 
     if(!res){
       throw new Error("Could not register account. Try Again!")
