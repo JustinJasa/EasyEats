@@ -14,7 +14,6 @@ export default function RecipePage() {
     
     return(
         <div className='flex flex-col md:ml-52'>
-            <Mainbar/>
             {isMobile && <MobileMenu/>}
             <Recipe recipeId={{recipeId}} />
         </div>
