@@ -1,13 +1,9 @@
-import React, {useEffect, useState} from "react";
-import Image from 'next/image'
-
-
+import React, { useEffect, useState } from "react";
 
 function Pin({ pin, index }) {
+  const [height, setHeight] = useState();
 
-  const [height, setHeight] = useState()
-
-  const heights = [24, 48, 32, 80]
+  const heights = [24, 48, 32, 80];
 
   function getRandomHeight(heights) {
     // generate a random index between 0 and the length of the array minus 1
@@ -17,13 +13,17 @@ function Pin({ pin, index }) {
   }
 
   useEffect(() => {
-    const length = getRandomHeight(heights)
-    setHeight(length)
+    const length = getRandomHeight(heights);
+    setHeight(length);
   });
 
   return (
     <div key={index} className={`align-center content-center rounded-xl m-4`}>
-      <img className={`rounded-2xl h-${height} w-full`} src={pin.image} alt="Main pin image"></img>
+      <img
+        className={`rounded-2xl h-${height} w-full`}
+        src={pin.image}
+        alt="Main pin image"
+      ></img>
       <h2 className="italic text-sm text-gray-500 mt-2">{pin.date}</h2>
       <h2 className="font-bold font-serif text-xl mt-2">{pin.title}</h2>
       <div className="mt-2 flex">

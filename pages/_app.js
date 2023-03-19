@@ -14,7 +14,16 @@ const gloock = localFont({
   variable: "--font-gloock",
 });
 
+// axios.interceptors.request.use(
+//   config => {
+//       config => {}
+//   }
+// )
+
 export default function App({ Component, pageProps, router }) {
+
+  console.log(pageProps.session)
+
   return (
     <>
       <SessionProvider session={pageProps.session}>
@@ -33,3 +42,5 @@ export default function App({ Component, pageProps, router }) {
     </>
   );
 }
+
+

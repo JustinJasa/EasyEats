@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { getRecipeComments, postRecipeComment } from "@/utils/apiRoutes";
 import CommentComponent from "./comment";
+import axios from "axios";
 
-const Comments = ({ toggleModal }) => {
+const Comments = ({ toggleModal, token, session, id }) => {
   {
     /*
     TODO
@@ -13,37 +13,73 @@ const Comments = ({ toggleModal }) => {
   */
   }
 
-  const [commentInfo, setCommentInfo] = useState()
-  const [newComment, setNewComment] = useState("")
+  console.log(session);
 
-  const fetchComments = async () => { 
-    const response = await getRecipeComments(1)
-    setCommentInfo(response)
-  }
+  const [commentInfo, setCommentInfo] = useState();
+  const [newComment, setNewComment] = useState("");
+  const [parent, enableAnimations] = useAutoAnimate();
+
+  const userId = session.user.account[0].user_id;
+
+  const getRecipeComments = async (recipeId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/recipes/${recipeId}/comments/all`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postRecipeComment = async (recipeId, userId, comment, rating) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/recipes/${recipeId}/comments/new`,
+        {
+          userId: userId,
+          comment: comment,
+          rating: rating,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const createComment = async (e) => {
-    try{
-      e.preventDefault()
-      await postRecipeComment(2,1, newComment, 5)
-      e.target.reset()
-      const newResponse = await getRecipeComments(2)
-      setCommentInfo(newResponse)
+    try {
+      e.preventDefault();
+      await postRecipeComment(id, userId, newComment, 5);
+      e.target.reset();
+      const newResponse = await getRecipeComments(id);
+      setCommentInfo(newResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  useEffect (() => { 
-    fetchComments()
-  }, [newComment])
+  const fetchComments = async () => {
+    const response = await getRecipeComments(id);
+    setCommentInfo(response);
+  };
 
+  useEffect(() => {
+    fetchComments();
+  }, [newComment]);
 
   // adding new comment to an array
   const addNewComment = (e) => {
     setNewComment(e.target.value);
   };
-
- 
 
   return (
     <>
@@ -83,7 +119,7 @@ const Comments = ({ toggleModal }) => {
         </div>
         <div ref={parent}>
           {commentInfo &&
-            commentInfo.map(({comment, username, key}) => (
+            commentInfo.map(({ comment, username, key }) => (
               <div index={key}>
                 <CommentComponent comment={comment} username={username} />
               </div>
