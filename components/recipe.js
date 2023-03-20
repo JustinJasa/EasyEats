@@ -25,8 +25,6 @@ function Recipe({recipeId, session}) {
     price: "$",
   });
 
-  
-
   // GET - Recipe info by recipeId
   const getRecipeInfo = async (recipeId) => {
     try {
