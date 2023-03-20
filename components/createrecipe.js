@@ -8,15 +8,19 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 function CreateRecipe({ session }) {
   const [selectedImages, setSelectedImages] = useState([]);
-  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
   const [category, setCategory] = useState([]);
   const [categories, setCategories] = useState([]);
   const [ingredients, setIngredients] = useState([]);
+  const [instructions, setInstructions] = useState([]);
+  const [description, setSetDescription] = useState("This is a really nice recipe");
+  const [timeHours, setTimeHours] = useState(1);
+  const [timeMinutes, setTimeMinutes] = useState(30);
+  const [price, setPrice] = useState("$");
   const [loading, setLoading] = useState(false);
   const [destination, setDestination] = useState();
   const [fields, setFields] = useState(false);
   const [imageAsset, setImageAsset] = useState();
-  const [price, setPrice] = useState();
   const [wrongImageType, setWrongImageType] = useState(false);
   const [user, setUser] = useState(false);
   const [ingredientModal, setIngredientModal] = useState(false);
@@ -27,6 +31,12 @@ function CreateRecipe({ session }) {
   const [parent, enableAnimations] = useAutoAnimate();
 
   const token = session.user.token;
+  const userId = session.user.account[0].user_id
+
+
+  
+  console.log(session)
+  console.log(userId)
 
   //GET - fetches all categories
   const getAllCategories = async () => {
@@ -100,7 +110,8 @@ function CreateRecipe({ session }) {
         `http://localhost:8000/recipes/${recipeId}/images/new`,
         formData,
         {
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+
         }
       );
       return response.data;
@@ -146,11 +157,11 @@ function CreateRecipe({ session }) {
   };
 
   const createRecipe = async () => {
-    const recipe = {
-      title,
+    let recipe = {
+      name,
       description,
-      time_h,
-      time_m,
+      timeHours,
+      timeMinutes,
       price,
       categories,
       ingredients,
@@ -159,19 +170,22 @@ function CreateRecipe({ session }) {
     localStorage.setItem("recipe", JSON.stringify(recipe));
 
     try {
-      const recipe = postRecipeInfo(
+      recipe = await postRecipeInfo(
+        userId,
         recipe.name,
         recipe.description,
-        recipe.time_h,
-        recipe.time_m,
+        recipe.timeHours,
+        recipe.timeMinutes,
         recipe.price
       );
-      const recipeId = recipe.id;
+      console.log(recipe)
+      const recipeId = recipe[0].recipe_id;
+      console.log(recipeId)
 
       // Call the other three functions with the recipeId
-      await postRecipeCategories(recipeId, categories);
+      // await postRecipeCategories(recipeId, categories);
       await postRecipeIngredients(recipeId, ingredients);
-      await postRecipeSteps(recipeId, steps);
+      await postRecipeSteps(recipeId, instructions);
       await postRecipeImages(recipeId)
 
     } catch (error) {
@@ -180,7 +194,7 @@ function CreateRecipe({ session }) {
   };
 
   useEffect(() => {
-    //fetches categories for select input
+    //fetches categories for select in812
     fetchCategories();
 
     // saves data on to webs local storage
@@ -188,7 +202,7 @@ function CreateRecipe({ session }) {
     if (savedRecipe) {
       const parsedRecipe = JSON.parse(savedRecipe);
       setSelectedImages(parsedRecipe.selectedImages);
-      setTitle(parsedRecipe.title);
+      setName(parsedRecipe.name);
       setCategory(parsedRecipe.category);
       setIngredients(parsedRecipe.ingredients);
       setInstructions(parsedRecipe.instructions);
@@ -214,7 +228,8 @@ function CreateRecipe({ session }) {
     for(const val of formData.values()) {
       console.log(val)
     }
-    postRecipeImages(1, formData)
+
+    console.log(formData)
     e.target.value = '';
   };
 
@@ -222,17 +237,15 @@ function CreateRecipe({ session }) {
   const submitIngredient = (e) => {
     e.preventDefault();
     if (!newIngredient) return;
-    setIngredients([...ingredients, { id: Date.now(), text: newIngredient }]);
+    setIngredients([...ingredients, newIngredient ]);
+    console.log(ingredients)
     setNewIngredient("");
   };
 
   const submitInstruction = (e) => {
     e.preventDefault();
     if (!newInstructions) return;
-    setInstructions([
-      ...instructions,
-      { id: Date.now(), text: newInstructions },
-    ]);
+    setInstructions([...instructions, newInstructions ]);
     setNewInstructions("");
   };
 
@@ -320,21 +333,11 @@ function CreateRecipe({ session }) {
         <div className="flex flex-1 flex-col gap-6 lg:pl-5 mt-5 w-full">
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Add your title"
             className="outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-200 p-2"
           />
-          {user && (
-            <div className="flex gap-2 mt-2 mb-2 items-center bg-white rounded-lg ">
-              <img
-                src={user.image}
-                className="w-10 h-10 rounded-full"
-                alt="user-profile"
-              />
-              <p className="font-bold">{user.userName}</p>
-            </div>
-          )}
           <div>
             <p className="mb-2 font-semibold text:lg sm:text-xl">
               Choose Recipe Category
@@ -357,7 +360,7 @@ function CreateRecipe({ session }) {
               </select>
             </div>
             <ul ref={parent}>
-              {category.map((item) => (
+              {category && category.map((item) => (
                 <li key={item.id} onClick={() => deleteCategory(item)}>
                   {item}
                 </li>
@@ -408,10 +411,10 @@ function CreateRecipe({ session }) {
                   <div>
                     <li
                       className="cursor-pointer m-4"
-                      key={item.id}
-                      onClick={() => deleteIngredient(item.text)}
+                      key={item}
+                      onClick={() => deleteIngredient(item)}
                     >
-                      {item.text}
+                      {item}
                     </li>
                   </div>
                 ))}
@@ -456,13 +459,13 @@ function CreateRecipe({ session }) {
           )}
           <div ref={parent}>
             {instructions &&
-              instructions.map((item) => (
+              instructions.map((item,index) => (
                 <ol
                   className="cursor-pointer"
-                  key={item.id}
-                  onClick={() => deleteInstruction(item.id)}
+                  key={index}
+                  onClick={() => deleteInstruction(item)}
                 >
-                  <li className="m-4">{item.text}</li>
+                  <li className="m-4">{item}</li>
                 </ol>
               ))}
           </div>
