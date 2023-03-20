@@ -12,7 +12,6 @@ function CreateRecipe({ session }) {
   const [category, setCategory] = useState([]);
   const [categories, setCategories] = useState([]);
   const [ingredients, setIngredients] = useState([]);
-  const [instructions, setInstructions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [destination, setDestination] = useState();
   const [fields, setFields] = useState(false);
@@ -95,12 +94,13 @@ function CreateRecipe({ session }) {
   };
 
   // POST - Recipe Images
-  const postRecipeImages = async (recipeId) => {
+  const postRecipeImages = async (recipeId, formData) => {
     try {
       const response = await axios.post(
         `http://localhost:8000/recipes/${recipeId}/images/new`,
+        formData,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
         }
       );
       return response.data;
@@ -207,11 +207,14 @@ function CreateRecipe({ session }) {
   
     const formData = new FormData();
     for (let i = 0; i < selectedFilesArray.length; i++) {
-      console.log(selectedFilesArray[i])
+      // console.log(selectedFilesArray[i])
       formData.append('images', selectedFilesArray[i]);
     }
 
-    console.log(formData)
+    for(const val of formData.values()) {
+      console.log(val)
+    }
+    postRecipeImages(1, formData)
     e.target.value = '';
   };
 

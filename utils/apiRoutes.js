@@ -1,4 +1,5 @@
 // API calls to the backend
+import { headers } from "@/next.config";
 import axios from "axios";
 import { authAxios } from "./authAxios";
 
@@ -150,6 +151,25 @@ export const postRecipeInfo = async (
     console.log(error);
   }
 };
+
+// POST - Recipe images
+export const postRecipeImages = async (recipeId, formData) => {
+    try {
+        const response = await axios.post(
+          `http://localhost:8000/recipes/${recipeId}/images/new`,
+          formData,
+          {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+          }
+        )
+
+        return response.data
+    } catch(error) {
+        console.log(error)
+    }
+}
 
 // POST - Recipe categories
 export const postRecipeCategories = async (recipeId, categories) => {
