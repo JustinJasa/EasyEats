@@ -13,8 +13,6 @@ const Comments = ({ toggleModal, token, session, id }) => {
   */
   }
 
-  console.log(session);
-
   const [commentInfo, setCommentInfo] = useState();
   const [newComment, setNewComment] = useState("");
   const [parent, enableAnimations] = useAutoAnimate();

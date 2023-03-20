@@ -22,7 +22,6 @@ const gloock = localFont({
 
 export default function App({ Component, pageProps, router }) {
 
-  console.log(pageProps.session)
 
   return (
     <>

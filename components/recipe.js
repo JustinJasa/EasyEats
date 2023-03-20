@@ -7,7 +7,6 @@ import { getSession, useSession } from "next-auth/react";
 function Recipe({recipeId, session}) {
 
 
-  // console.log(session)
   const id = recipeId
   const token = session.user.token;
 

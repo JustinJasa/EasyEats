@@ -8,17 +8,19 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 function CreateRecipe({ session }) {
   const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImagesFile, setSelectedImagesFile] = useState([]);
   const [name, setName] = useState("");
   const [category, setCategory] = useState([]);
   const [categories, setCategories] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [instructions, setInstructions] = useState([]);
-  const [description, setSetDescription] = useState("This is a really nice recipe");
+  const [description, setSetDescription] = useState(
+    "This is a really nice recipe"
+  );
   const [timeHours, setTimeHours] = useState(1);
   const [timeMinutes, setTimeMinutes] = useState(30);
   const [price, setPrice] = useState("$");
   const [loading, setLoading] = useState(false);
-  const [destination, setDestination] = useState();
   const [fields, setFields] = useState(false);
   const [imageAsset, setImageAsset] = useState();
   const [wrongImageType, setWrongImageType] = useState(false);
@@ -31,12 +33,7 @@ function CreateRecipe({ session }) {
   const [parent, enableAnimations] = useAutoAnimate();
 
   const token = session.user.token;
-  const userId = session.user.account[0].user_id
-
-
-  
-  console.log(session)
-  console.log(userId)
+  const userId = session.user.account[0].user_id;
 
   //GET - fetches all categories
   const getAllCategories = async () => {
@@ -44,6 +41,7 @@ function CreateRecipe({ session }) {
       const response = await axios.get(`http://localhost:8000/categories`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -104,14 +102,26 @@ function CreateRecipe({ session }) {
   };
 
   // POST - Recipe Images
-  const postRecipeImages = async (recipeId, formData) => {
+  const postRecipeImages = async (recipeId, images) => {
+    const formData = new FormData();
+    for (let i = 0; i < images.length; i++) {
+      // console.log(images[i])
+      formData.append("images", images[i]);
+    }
+
+    // for(const val of formData.values()) {
+    //   console.log(val)
+    // }
+
     try {
       const response = await axios.post(
         `http://localhost:8000/recipes/${recipeId}/images/new`,
         formData,
         {
-          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
-
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       return response.data;
@@ -178,23 +188,20 @@ function CreateRecipe({ session }) {
         recipe.timeMinutes,
         recipe.price
       );
-      console.log(recipe)
       const recipeId = recipe[0].recipe_id;
-      console.log(recipeId)
 
       // Call the other three functions with the recipeId
-      // await postRecipeCategories(recipeId, categories);
+      await postRecipeCategories(recipeId, category);
       await postRecipeIngredients(recipeId, ingredients);
       await postRecipeSteps(recipeId, instructions);
-      await postRecipeImages(recipeId)
-
+      await postRecipeImages(recipeId, selectedImagesFile);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    //fetches categories for select in812
+    //fetches categories to select
     fetchCategories();
 
     // saves data on to webs local storage
@@ -212,40 +219,30 @@ function CreateRecipe({ session }) {
   const uploadImage = async (e) => {
     const selectedFiles = e.target.files;
     const selectedFilesArray = Array.from(selectedFiles);
-  
+
     const imagesArray = selectedFilesArray.map((file) => {
       return URL.createObjectURL(file);
     });
-  
+
+    setSelectedImagesFile(selectedFilesArray);
+    console.log(selectedImagesFile);
     setSelectedImages(imagesArray);
-  
-    const formData = new FormData();
-    for (let i = 0; i < selectedFilesArray.length; i++) {
-      // console.log(selectedFilesArray[i])
-      formData.append('images', selectedFilesArray[i]);
-    }
 
-    for(const val of formData.values()) {
-      console.log(val)
-    }
-
-    console.log(formData)
-    e.target.value = '';
+    e.target.value = "";
   };
-
 
   const submitIngredient = (e) => {
     e.preventDefault();
     if (!newIngredient) return;
-    setIngredients([...ingredients, newIngredient ]);
-    console.log(ingredients)
+    setIngredients([...ingredients, newIngredient]);
+    console.log(ingredients);
     setNewIngredient("");
   };
 
   const submitInstruction = (e) => {
     e.preventDefault();
     if (!newInstructions) return;
-    setInstructions([...instructions, newInstructions ]);
+    setInstructions([...instructions, newInstructions]);
     setNewInstructions("");
   };
 
@@ -262,12 +259,16 @@ function CreateRecipe({ session }) {
 
   const categoryChange = (e) => {
     const { value } = e.target;
-    setCategory((prevSelectedOptions) => [...prevSelectedOptions, value]);
+    setCategory((prevSelectedOptions) => {
+      // check if category is an array, and initialize it to an empty array if not
+      const categoryArray = Array.isArray(prevSelectedOptions)
+        ? prevSelectedOptions
+        : [];
+      return [...categoryArray, value];
+    });
   };
 
   const deleteCategory = (value) => {
-    console.log(value);
-    console.log(category.value);
     setCategory(category.filter((category) => category !== value));
   };
 
@@ -294,18 +295,18 @@ function CreateRecipe({ session }) {
             {wrongImageType && (
               <p className="text-red-700">It&apos;s wrong file type.</p>
             )}
-              <label className="cursor-pointer">
-                <div className="flex flex-col items-center justify-center h-full ">
-                  <div className="flex flex-col justify-center items-center">
-                    <ArrowUpOnSquareIcon className="text-black h-8 w-8" />
-                    <p className="text-lg">Click to upload images.</p>
-                  </div>
+            <label className="cursor-pointer">
+              <div className="flex flex-col items-center justify-center h-full ">
+                <div className="flex flex-col justify-center items-center">
+                  <ArrowUpOnSquareIcon className="text-black h-8 w-8" />
+                  <p className="text-lg">Click to upload images.</p>
+                </div>
 
-                  <p className="mt-32 text-gray-400">
-                    Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF or
-                    TIFF less than 20MB
-                  </p>
-                  <input
+                <p className="mt-32 text-gray-400">
+                  Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF or
+                  TIFF less than 20MB
+                </p>
+                <input
                   type="file"
                   name="upload-image"
                   className="w-0 h-0"
@@ -313,8 +314,8 @@ function CreateRecipe({ session }) {
                   accept="image/png , image/jpeg, image/webp, image/gif, image/tiff, image/jpg"
                   onChange={uploadImage}
                 />
-                </div>
-              </label>
+              </div>
+            </label>
 
             <h2>Your Images</h2>
             {selectedImages &&
@@ -348,11 +349,11 @@ function CreateRecipe({ session }) {
                 onChange={categoryChange}
               >
                 {categories &&
-                  categories.map((item) => (
+                  categories.map((item, index) => (
                     <option
                       className="text-base border-0 outline-none text-black cursor-pointer"
                       value={item.name}
-                      key={item.name}
+                      key={index}
                     >
                       {item.name}
                     </option>
@@ -360,11 +361,13 @@ function CreateRecipe({ session }) {
               </select>
             </div>
             <ul ref={parent}>
-              {category && category.map((item) => (
-                <li key={item.id} onClick={() => deleteCategory(item)}>
-                  {item}
-                </li>
-              ))}
+              {category &&
+                category.map((item,index) => (
+                  <li key={index} onClick={() => deleteCategory(item)}>
+                    {item}
+                  </li>
+                ))}
+              {console.log(category)}
             </ul>
           </div>
 
@@ -459,7 +462,7 @@ function CreateRecipe({ session }) {
           )}
           <div ref={parent}>
             {instructions &&
-              instructions.map((item,index) => (
+              instructions.map((item, index) => (
                 <ol
                   className="cursor-pointer"
                   key={index}
