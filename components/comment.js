@@ -2,14 +2,14 @@ import React from "react";
 
 function CommentComponent({ comment, username }) {
 
-
+  
 
   return (
     <>
       <hr />
       <div className="flex items-center mt-4">
       
-      <p className="text-lg bg-gray-300 text-center p-2 rounded-full font-bold">{username.charAt(0)}</p>
+      <p className="text-lg bg-gray-300 text-center p-2 rounded-full">{username.charAt(0)}</p>
 
         <div className="flex flex-col ml-2">
         <h4 className="font-bold">{username}</h4>

@@ -9,7 +9,6 @@ function CategorySelector({session}) {
   // const fetcher = (...args) => fetch(...args).then(res => res.json())
   // const { data, error, isLoading } = useSWR('/localhost:8000/categories', fetcher)
   const [categories, setCategories] = useState([]);
-  // console.log(data)
 
   const token = session.user.token
 
@@ -27,7 +26,6 @@ function CategorySelector({session}) {
   const fetchCategories = async () => {
     const apiCall = await getAllCategories()
     setCategories(apiCall)
-    console.log(categories)
   };
 
   useEffect(() => {

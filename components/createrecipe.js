@@ -39,7 +39,6 @@ function CreateRecipe({ session }) {
       const response = await axios.get(`http://localhost:8000/categories`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -225,7 +224,6 @@ function CreateRecipe({ session }) {
     });
 
     setSelectedImagesFile(selectedFilesArray);
-    console.log(selectedImagesFile);
     setSelectedImages(imagesArray);
 
     e.target.value = "";
@@ -235,7 +233,6 @@ function CreateRecipe({ session }) {
     e.preventDefault();
     if (!newIngredient) return;
     setIngredients([...ingredients, newIngredient]);
-    console.log(ingredients);
     setNewIngredient("");
   };
 
@@ -407,7 +404,6 @@ function CreateRecipe({ session }) {
                     {item}
                   </li>
                 ))}
-              {console.log(category)}
             </ul>
           </div>
           <div>
@@ -449,11 +445,11 @@ function CreateRecipe({ session }) {
             )}
             <div ref={parent}>
               {ingredients &&
-                ingredients.map((item) => (
+                ingredients.map((item,index) => (
                   <div>
                     <li
                       className="cursor-pointer m-4"
-                      key={item}
+                      key={index}
                       onClick={() => deleteIngredient(item)}
                     >
                       {item}

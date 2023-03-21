@@ -20,7 +20,6 @@ export default function LoginCard() {
       callbackUrl:"http://localhost:3000/main"
     });
 
-    console.log(res)
     if(res.ok) router.push(res.url)
 
   };
