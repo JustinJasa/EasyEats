@@ -14,12 +14,10 @@ function CreateRecipe({ session }) {
   const [categories, setCategories] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [instructions, setInstructions] = useState([]);
-  const [description, setSetDescription] = useState(
-    "This is a really nice recipe"
-  );
-  const [timeHours, setTimeHours] = useState(1);
-  const [timeMinutes, setTimeMinutes] = useState(30);
-  const [price, setPrice] = useState("$");
+  const [description, setDescription] = useState("");
+  const [timeHours, setTimeHours] = useState();
+  const [timeMinutes, setTimeMinutes] = useState();
+  const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState(false);
   const [imageAsset, setImageAsset] = useState();
@@ -30,8 +28,8 @@ function CreateRecipe({ session }) {
   const [newIngredient, setNewIngredient] = useState([]);
   const [newInstructions, setNewInstructions] = useState([]);
 
-  const [parent, enableAnimations] = useAutoAnimate();
 
+  const [parent, enableAnimations] = useAutoAnimate();
   const token = session.user.token;
   const userId = session.user.account[0].user_id;
 
@@ -195,6 +193,8 @@ function CreateRecipe({ session }) {
       await postRecipeIngredients(recipeId, ingredients);
       await postRecipeSteps(recipeId, instructions);
       await postRecipeImages(recipeId, selectedImagesFile);
+
+      localStorage.clear()
     } catch (error) {
       console.log(error);
     }
@@ -246,17 +246,6 @@ function CreateRecipe({ session }) {
     setNewInstructions("");
   };
 
-  const deleteIngredient = (text) => {
-    setIngredients(
-      ingredients.filter((ingredients) => ingredients.text !== text)
-    );
-  };
-
-  const deleteImage = (image) => {
-    setSelectedImages(selectedImages.filter((e) => e !== image));
-    URL.revokeObjectURL(image);
-  };
-
   const categoryChange = (e) => {
     const { value } = e.target;
     setCategory((prevSelectedOptions) => {
@@ -272,10 +261,21 @@ function CreateRecipe({ session }) {
     setCategory(category.filter((category) => category !== value));
   };
 
-  const deleteInstruction = (id) => {
+  const deleteInstruction = (value) => {
     setInstructions(
-      instructions.filter((instructions) => instructions.id !== id)
+      instructions.filter((instructions) => instructions !== value)
     );
+  };
+
+  const deleteIngredient = (value) => {
+    setIngredients(
+      ingredients.filter((ingredients) => ingredients !== value)
+    );
+  };
+
+  const deleteImage = (image) => {
+    setSelectedImages(selectedImages.filter((e) => e !== image));
+    URL.revokeObjectURL(image);
   };
 
   return (
@@ -332,24 +332,63 @@ function CreateRecipe({ session }) {
         </div>
 
         <div className="flex flex-1 flex-col gap-6 lg:pl-5 mt-5 w-full">
+          <h4 className="text-xl font-bold">Title of Recipe.</h4>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Add your title"
-            className="outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-200 p-2"
+            className="outline-none text-2xl sm:text-3xl font-md border-b-2 border-gray-200 p-2"
+          />
+          <h4 className="text-xl font-bold">Description of Dish.</h4>
+          <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="A really yummy dish!"
+            className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
           />
           <div>
-            <p className="mb-2 font-semibold text:lg sm:text-xl">
-              Choose Recipe Category
-            </p>
+            <h4 className="text-xl font-bold">Time to Create.</h4>
+            <input
+              type="value"
+              value={timeHours}
+              onChange={(e) => setTimeHours(e.target.value)}
+              placeholder="In hours, 1 = 1hr"
+              className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
+            />{" "}
+            <input
+              type="value"
+              value={timeMinutes}
+              onChange={(e) => setTimeMinutes(e.target.value)}
+              placeholder="In minutes, 30 = 30mins"
+              className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
+            />
+          </div>
+          <h4 className="text-xl font-bold">Price</h4>
+          <select
+            value={price}
+            onChange={(event) => setPrice(event.target.value)}
+            className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
+          >
+            <option value="">Select price range</option>
+            <option value="$">$</option>
+            <option value="$$">$$</option>
+            <option value="$$$">$$$</option>
+          </select>{" "}
+          <div>
+            <h4 className="mb-2 font-bold text:lg sm:text-xl">
+              Choose Recipe Category.
+            </h4>
             <div className="flex justify-between">
               <select
                 className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
                 onChange={categoryChange}
               >
+                <option value="">Select Category</option>
                 {categories &&
                   categories.map((item, index) => (
+                    <>
                     <option
                       className="text-base border-0 outline-none text-black cursor-pointer"
                       value={item.name}
@@ -357,12 +396,13 @@ function CreateRecipe({ session }) {
                     >
                       {item.name}
                     </option>
+                    </>
                   ))}
               </select>
             </div>
             <ul ref={parent}>
               {category &&
-                category.map((item,index) => (
+                category.map((item, index) => (
                   <li key={index} onClick={() => deleteCategory(item)}>
                     {item}
                   </li>
@@ -370,10 +410,9 @@ function CreateRecipe({ session }) {
               {console.log(category)}
             </ul>
           </div>
-
           <div>
             <div className="flex justify-between pr-4 items-center">
-              <h2 className="font-bold text-2xl">Ingredients</h2>
+              <h2 className="font-bold text-2xl">Ingredients.</h2>
               <PlusIcon
                 className="h-8 w-8 lg:h-6 lg:w-6 mr-2 bg-black text-white rounded-lg"
                 onClick={() => setIngredientModal(!ingredientModal)}
@@ -423,7 +462,6 @@ function CreateRecipe({ session }) {
                 ))}
             </div>
           </div>
-
           <div className="flex justify-between pr-4 items-center">
             <h2 className="font-bold text-2xl mb-2">Instructions</h2>
             <PlusIcon
