@@ -278,13 +278,13 @@ function PinGallery() {
         breakpointCols={breakpointColumnsObj}
       >
         {pins.map((pin, index) => (
-          <>
+          <div key={index}>
             <Fade cascade damping={0.1}>
               <Link href={`/recipe/${encodeURIComponent(id)}`}>
                 <Pin pin={pin} className="w-max" />
               </Link>
             </Fade>
-          </>
+          </div>
         ))}
       </Masonry>
     </>
