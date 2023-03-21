@@ -6,15 +6,19 @@ import axios from "axios";
 import Spinner from "./spinner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-
-function CreateRecipe() {
+function CreateRecipe({ session }) {
   const [selectedImages, setSelectedImages] = useState([]);
-  const [title, setTitle] = useState("");
+  const [selectedImagesFile, setSelectedImagesFile] = useState([]);
+  const [name, setName] = useState("");
   const [category, setCategory] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [instructions, setInstructions] = useState([]);
+  const [description, setDescription] = useState("");
+  const [timeHours, setTimeHours] = useState();
+  const [timeMinutes, setTimeMinutes] = useState();
+  const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
-  const [destination, setDestination] = useState();
   const [fields, setFields] = useState(false);
   const [imageAsset, setImageAsset] = useState();
   const [wrongImageType, setWrongImageType] = useState(false);
@@ -24,97 +28,245 @@ function CreateRecipe() {
   const [newIngredient, setNewIngredient] = useState([]);
   const [newInstructions, setNewInstructions] = useState([]);
 
-  const [parent, enableAnimations] = useAutoAnimate()
 
+  const [parent, enableAnimations] = useAutoAnimate();
+  const token = session.user.token;
+  const userId = session.user.account[0].user_id;
 
-  let categories = [
-    "Recommended",
-    "Top-Picks",
-    "Asian",
-    "Poultry",
-    "Meat",
-    "Middle-East",
-    "Quick",
-    "Cheap",
-    "Noodles",
-    "Vegan",
-    "Beef",
-    "Breakfast",
-    "Lunch",
-    "Dinner",
-    "Snacks",
-    "Dessert",
-    "Savory",
-    "Spicy",
-    "Non-Spicy",
-  ];
+  //GET - fetches all categories
+  const getAllCategories = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/categories`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const saveRecipe = async () => {
-    const recipe = {
-      selectedImages,
-      title,
-      category,
+  const fetchCategories = async () => {
+    const apiCallForCategories = await getAllCategories();
+    setCategories(apiCallForCategories);
+  };
+
+  // POST - Recipe info
+  const postRecipeInfo = async (
+    userId,
+    name,
+    description,
+    time_h,
+    time_m,
+    price
+  ) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/recipes/new`,
+        {
+          userId: userId,
+          name: name,
+          description: description,
+          time_h: time_h,
+          time_m: time_m,
+          price: price,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // POST - Recipe categories
+  const postRecipeCategories = async (recipeId, categories) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/recipes/${recipeId}/categories/new`,
+        {
+          categories: categories,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // POST - Recipe Images
+  const postRecipeImages = async (recipeId, images) => {
+    const formData = new FormData();
+    for (let i = 0; i < images.length; i++) {
+      // console.log(images[i])
+      formData.append("images", images[i]);
+    }
+
+    // for(const val of formData.values()) {
+    //   console.log(val)
+    // }
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/recipes/${recipeId}/images/new`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // POST - Recipe ingredients
+  const postRecipeIngredients = async (recipeId, ingredients) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/recipes/${recipeId}/ingredients/new`,
+        {
+          ingredients: ingredients,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // POST - Recipe steps
+  const postRecipeSteps = async (recipeId, steps) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/recipes/${recipeId}/steps/new`,
+        {
+          steps: steps,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const createRecipe = async () => {
+    let recipe = {
+      name,
+      description,
+      timeHours,
+      timeMinutes,
+      price,
+      categories,
       ingredients,
       instructions,
     };
     localStorage.setItem("recipe", JSON.stringify(recipe));
 
     try {
-      const response = await axios.post("http://localhost:8000/recipe", recipe);
-      console.log(response.data);
+      recipe = await postRecipeInfo(
+        userId,
+        recipe.name,
+        recipe.description,
+        recipe.timeHours,
+        recipe.timeMinutes,
+        recipe.price
+      );
+      const recipeId = recipe[0].recipe_id;
+
+      // Call the other three functions with the recipeId
+      await postRecipeCategories(recipeId, category);
+      await postRecipeIngredients(recipeId, ingredients);
+      await postRecipeSteps(recipeId, instructions);
+      await postRecipeImages(recipeId, selectedImagesFile);
+
+      localStorage.clear()
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
   useEffect(() => {
+    //fetches categories to select
+    fetchCategories();
+
     // saves data on to webs local storage
     const savedRecipe = localStorage.getItem("recipe");
     if (savedRecipe) {
       const parsedRecipe = JSON.parse(savedRecipe);
       setSelectedImages(parsedRecipe.selectedImages);
-      setTitle(parsedRecipe.title);
+      setName(parsedRecipe.name);
       setCategory(parsedRecipe.category);
       setIngredients(parsedRecipe.ingredients);
       setInstructions(parsedRecipe.instructions);
     }
   }, []);
 
-  const uploadImage = (e) => {
+  const uploadImage = async (e) => {
     const selectedFiles = e.target.files;
     const selectedFilesArray = Array.from(selectedFiles);
-    console.log(selectedFilesArray);
 
     const imagesArray = selectedFilesArray.map((file) => {
       return URL.createObjectURL(file);
     });
 
+    setSelectedImagesFile(selectedFilesArray);
     setSelectedImages(imagesArray);
-    console.log(selectedImages);
-    // FOR BUG IN CHROME
+
     e.target.value = "";
   };
 
   const submitIngredient = (e) => {
     e.preventDefault();
     if (!newIngredient) return;
-    setIngredients([...ingredients, { id: Date.now(), text: newIngredient }]);
+    setIngredients([...ingredients, newIngredient]);
     setNewIngredient("");
   };
 
   const submitInstruction = (e) => {
     e.preventDefault();
     if (!newInstructions) return;
-    setInstructions([
-      ...instructions,
-      { id: Date.now(), text: newInstructions },
-    ]);
+    setInstructions([...instructions, newInstructions]);
     setNewInstructions("");
   };
 
-  const deleteIngredient = (text) => {
+  const categoryChange = (e) => {
+    const { value } = e.target;
+    setCategory((prevSelectedOptions) => {
+      // check if category is an array, and initialize it to an empty array if not
+      const categoryArray = Array.isArray(prevSelectedOptions)
+        ? prevSelectedOptions
+        : [];
+      return [...categoryArray, value];
+    });
+  };
+
+  const deleteCategory = (value) => {
+    setCategory(category.filter((category) => category !== value));
+  };
+
+  const deleteInstruction = (value) => {
+    setInstructions(
+      instructions.filter((instructions) => instructions !== value)
+    );
+  };
+
+  const deleteIngredient = (value) => {
     setIngredients(
-      ingredients.filter((ingredients) => ingredients.text !== text)
+      ingredients.filter((ingredients) => ingredients !== value)
     );
   };
 
@@ -123,25 +275,8 @@ function CreateRecipe() {
     URL.revokeObjectURL(image);
   };
 
-  const categoryChange = (e) => {
-    const { value } = e.target;
-    setCategory((prevSelectedOptions) => [...prevSelectedOptions, value]);
-  };
-
-  const deleteCategory = (value) => {
-    console.log(value);
-    console.log(category.value);
-    setCategory(category.filter((category) => category !== value));
-  };
-
-  const deleteInstruction = (id) => {
-    setInstructions(
-      instructions.filter((instructions) => instructions.id !== id)
-    );
-  };
-
   return (
-    <div className="flex flex-col justify-center items-center lg:ml-20" >
+    <div className="flex flex-col justify-center items-center lg:ml-20">
       {fields && (
         <p className="text-red-500 mb-5 text-xl transition-all duration-150 ease-in">
           Please add all fields.
@@ -168,16 +303,17 @@ function CreateRecipe() {
                   Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF or
                   TIFF less than 20MB
                 </p>
+                <input
+                  type="file"
+                  name="upload-image"
+                  className="w-0 h-0"
+                  multiple
+                  accept="image/png , image/jpeg, image/webp, image/gif, image/tiff, image/jpg"
+                  onChange={uploadImage}
+                />
               </div>
-              <input
-                type="file"
-                name="upload-image"
-                onChange={uploadImage}
-                className="w-0 h-0"
-                multiple
-                accept="image/png , image/jpeg, image/webp, image/gif, image/tiff, image/jpg"
-              />
             </label>
+
             <h2>Your Images</h2>
             {selectedImages &&
               selectedImages.map((image, index) => (
@@ -193,55 +329,86 @@ function CreateRecipe() {
         </div>
 
         <div className="flex flex-1 flex-col gap-6 lg:pl-5 mt-5 w-full">
+          <h4 className="text-xl font-bold">Title of Recipe.</h4>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Add your title"
-            className="outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-200 p-2"
+            className="outline-none text-2xl sm:text-3xl font-md border-b-2 border-gray-200 p-2"
           />
-          {user && (
-            <div className="flex gap-2 mt-2 mb-2 items-center bg-white rounded-lg ">
-              <img
-                src={user.image}
-                className="w-10 h-10 rounded-full"
-                alt="user-profile"
-              />
-              <p className="font-bold">{user.userName}</p>
-            </div>
-          )}
+          <h4 className="text-xl font-bold">Description of Dish.</h4>
+          <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="A really yummy dish!"
+            className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
+          />
           <div>
-            <p className="mb-2 font-semibold text:lg sm:text-xl">
-              Choose Recipe Category
-            </p>
+            <h4 className="text-xl font-bold">Time to Create.</h4>
+            <input
+              type="value"
+              value={timeHours}
+              onChange={(e) => setTimeHours(e.target.value)}
+              placeholder="In hours, 1 = 1hr"
+              className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
+            />{" "}
+            <input
+              type="value"
+              value={timeMinutes}
+              onChange={(e) => setTimeMinutes(e.target.value)}
+              placeholder="In minutes, 30 = 30mins"
+              className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
+            />
+          </div>
+          <h4 className="text-xl font-bold">Price</h4>
+          <select
+            value={price}
+            onChange={(event) => setPrice(event.target.value)}
+            className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
+          >
+            <option value="">Select price range</option>
+            <option value="$">$</option>
+            <option value="$$">$$</option>
+            <option value="$$$">$$$</option>
+          </select>{" "}
+          <div>
+            <h4 className="mb-2 font-bold text:lg sm:text-xl">
+              Choose Recipe Category.
+            </h4>
             <div className="flex justify-between">
               <select
                 className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
-                onChange={categoryChange} 
+                onChange={categoryChange}
               >
-                {categories.map((item) => (
-                  <option 
-                    className="text-base border-0 outline-none text-black cursor-pointer"
-                    value={item}
-                    key={item}
-                  >
-                    {item}
-                  </option>
-                ))}
+                <option value="">Select Category</option>
+                {categories &&
+                  categories.map((item, index) => (
+                    <>
+                    <option
+                      className="text-base border-0 outline-none text-black cursor-pointer"
+                      value={item.name}
+                      key={index}
+                    >
+                      {item.name}
+                    </option>
+                    </>
+                  ))}
               </select>
             </div>
             <ul ref={parent}>
-              {category.map((item) => (
-                <li key={item.id} onClick={() => deleteCategory(item)}>
-                  {item}
-                </li>
-              ))}
+              {category &&
+                category.map((item, index) => (
+                  <li key={index} onClick={() => deleteCategory(item)}>
+                    {item}
+                  </li>
+                ))}
             </ul>
           </div>
-
           <div>
             <div className="flex justify-between pr-4 items-center">
-              <h2 className="font-bold text-2xl">Ingredients</h2>
+              <h2 className="font-bold text-2xl">Ingredients.</h2>
               <PlusIcon
                 className="h-8 w-8 lg:h-6 lg:w-6 mr-2 bg-black text-white rounded-lg"
                 onClick={() => setIngredientModal(!ingredientModal)}
@@ -276,22 +443,21 @@ function CreateRecipe() {
                 </div>
               </div>
             )}
-            <div  ref={parent}>
+            <div ref={parent}>
               {ingredients &&
-                ingredients.map((item) => (
-                  <div> 
+                ingredients.map((item,index) => (
+                  <div>
                     <li
                       className="cursor-pointer m-4"
-                      key={item.id}
-                      onClick={() => deleteIngredient(item.text)}
+                      key={index}
+                      onClick={() => deleteIngredient(item)}
                     >
-                      {item.text}
+                      {item}
                     </li>
                   </div>
                 ))}
             </div>
           </div>
-
           <div className="flex justify-between pr-4 items-center">
             <h2 className="font-bold text-2xl mb-2">Instructions</h2>
             <PlusIcon
@@ -330,13 +496,13 @@ function CreateRecipe() {
           )}
           <div ref={parent}>
             {instructions &&
-              instructions.map((item) => (
+              instructions.map((item, index) => (
                 <ol
                   className="cursor-pointer"
-                  key={item.id}
-                  onClick={() => deleteInstruction(item.id)}
+                  key={index}
+                  onClick={() => deleteInstruction(item)}
                 >
-                  <li className="m-4">{item.text}</li>
+                  <li className="m-4">{item}</li>
                 </ol>
               ))}
           </div>
@@ -344,7 +510,7 @@ function CreateRecipe() {
             <div className="flex justify-end items-end mt-5">
               <button
                 type="button"
-                onClick={saveRecipe}
+                onClick={createRecipe}
                 className="bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none"
               >
                 Save Recipe

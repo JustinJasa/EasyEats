@@ -21,7 +21,7 @@ function Layout({ children }) {
     >
       {noNav.includes(router.pathname) ? null : <div>
         
-        <CategorySelector />
+        <CategorySelector session={session}/>
         <Mainbar session={session}/>
          </div>}
       <main>{children}</main>

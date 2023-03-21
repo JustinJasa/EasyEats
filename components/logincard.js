@@ -22,7 +22,6 @@ export default function LoginCard() {
 
     if(res.ok) router.push(res.url)
 
-
   };
 
   const formik = useFormik({

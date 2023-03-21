@@ -25,7 +25,6 @@ function Mainbar({session}) {
           <div className="flex bg-green-600 justify-center items-center mr-4 rounded-lg p-2 text-white">
             <UserIcon className="h-8 w-8 sm:h-4 sm:w-4 mr-2" />
             <p className="hidden sm:block">{session.user.account[0].username}</p>
-            {/* <img src={session.user.image} alt="" onClick={handleSignOut}/> */}
           </div>
           </Link>
         )}
