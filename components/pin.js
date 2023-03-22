@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 
 function Pin({ pin, index, session }) {
   const [imageURL, setImageURL] = useState(null)
@@ -16,15 +16,19 @@ function Pin({ pin, index, session }) {
       }
       // console.log(`Im recipe ${recipeId} trying to access image ${imageId}`)
 
-      const response = await axios.get(`http://localhost:8000/recipes/${recipeId}/images/${imageId}`, {
+      const response = await fetch(`http://localhost:8000/recipes/${recipeId}/images/${imageId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
 
+      // console.log(response.blob())
+
       // Something needs to be fixed here so the image is displayed:
       // - - - - - - - - - -
-      const blob = new Blob([response.data], { type: response.headers["content-type"] })
+      // const blob = new Blob([response.data], { type: response.headers["content-type"] })
+      const blob = await response.blob()
       console.log(blob)
       const url = URL.createObjectURL(blob)
+      console.log(url)
       // - - - - - - - - - -
       setImageURL(url)
     }
@@ -53,7 +57,7 @@ function Pin({ pin, index, session }) {
     const length = getRandomHeight(heights);
     setHeight(length);
     getRecipeImage(index, pin.image_id)
-  });
+  }, []);
 
   return (
     <div key={index} className={`align-center content-center rounded-xl m-4`}>
