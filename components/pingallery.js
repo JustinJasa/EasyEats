@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Pin from "./pin";
 import Masonry from "react-masonry-css";
 import { Fade } from "react-awesome-reveal";
 import { getRecipeInfo, getRecipeCategories, getRecipeIngredients, getRecipeSteps } from "@/utils/apiRoutes";
+import axios from "axios";
 
-let pins = [
+let pins1 = [
   {
     author: "Justin",
     profileImage: "https://picsum.photos/20",
@@ -267,9 +268,27 @@ const breakpointColumnsObj = {
   500: 1,
 };
 
-function PinGallery() {
-  // hardcoding id for now
-  let id = 1;
+function PinGallery({ session }) {
+  const [pins, setPins] = useState([]);
+
+  const token = session.user.token;
+  const userId = session.user.account[0].user_id;
+
+  const getAllRecipes = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/recipes/all`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      // console.log("DATA", response.data)
+      setPins(response.data)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getAllRecipes()
+  }, [])
 
   return (
     <>
@@ -277,11 +296,11 @@ function PinGallery() {
         className="flex animate-slide-fwd"
         breakpointCols={breakpointColumnsObj}
       >
-        {pins.map((pin, index) => (
-          <div key={index}>
+        {pins.map((pin) => (
+          <div key={pin.recipe_id}>
             <Fade cascade damping={0.1}>
-              <Link href={`/recipe/${encodeURIComponent(id)}`}>
-                <Pin pin={pin} className="w-max" />
+              <Link href={`/recipe/${encodeURIComponent(pin.recipe_id)}`}>
+                <Pin pin={pin} index={pin.recipe_id} session={session} className="w-max" />
               </Link>
             </Fade>
           </div>
