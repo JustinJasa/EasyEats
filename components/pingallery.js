@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import Pin from "./pin";
 import Masonry from "react-masonry-css";
+import { Fade } from "react-awesome-reveal";
+import { getRecipeInfo, getRecipeCategories, getRecipeIngredients, getRecipeSteps } from "@/utils/apiRoutes";
 
 let pins = [
   {
@@ -151,6 +153,111 @@ let pins = [
     title: "Delicious tacos",
     date: "Jan 9, 2023",
   },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
+  {
+    author: "Bray",
+    profileImage: "https://picsum.photos/20/20",
+    image: "https://picsum.photos/300",
+    title: "Delicious tacos",
+    date: "Jan 9, 2023",
+  },
 ];
 
 const breakpointColumnsObj = {
@@ -160,19 +267,23 @@ const breakpointColumnsObj = {
   500: 1,
 };
 
-
 function PinGallery() {
   // hardcoding id for now
   let id = 1;
 
   return (
     <>
-      <Masonry className="flex animate-slide-fwd" breakpointCols={breakpointColumnsObj}>
+      <Masonry
+        className="flex animate-slide-fwd"
+        breakpointCols={breakpointColumnsObj}
+      >
         {pins.map((pin, index) => (
           <>
-            <Link href={`/recipe/${encodeURIComponent(id)}`}>
-              <Pin pin={pin} className="w-max" />
-            </Link>
+            <Fade cascade damping={0.1}>
+              <Link href={`/recipe/${encodeURIComponent(id)}`}>
+                <Pin pin={pin} className="w-max" />
+              </Link>
+            </Fade>
           </>
         ))}
       </Masonry>

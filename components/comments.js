@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import CommentComponent from "./comment";
+import axios from "axios";
 
-const Comments = ({ toggleModal }) => {
+const Comments = ({ toggleModal, token, session, id }) => {
   {
     /*
     TODO
@@ -11,27 +13,70 @@ const Comments = ({ toggleModal }) => {
   */
   }
 
-
-
-  const [comments, setComments] = useState([
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,!",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
-  ]);
+  const [commentInfo, setCommentInfo] = useState();
   const [newComment, setNewComment] = useState("");
+  const [parent, enableAnimations] = useAutoAnimate();
+
+  const userId = session.user.account[0].user_id;
+  const username = session.user.account[0].username
+
+  const getRecipeComments = async (recipeId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/recipes/${recipeId}/comments/all`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postRecipeComment = async (recipeId, userId, comment, rating) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/recipes/${recipeId}/comments/new`,
+        {
+          userId: userId,
+          comment: comment,
+          rating: rating,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const createComment = async (e) => {
+    try {
+      e.preventDefault();
+      await postRecipeComment(id, userId, newComment, 5);
+      e.target.reset();
+      const newResponse = await getRecipeComments(id);
+      setCommentInfo(newResponse);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchComments = async () => {
+    const response = await getRecipeComments(id);
+    setCommentInfo(response);
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [newComment]);
 
   // adding new comment to an array
   const addNewComment = (e) => {
     setNewComment(e.target.value);
-  };
-
-  const submitNewComment = (e) => {
-    e.preventDefault();
-    setComments([...comments, newComment ])
-    setNewComment("");
-    e.target.reset();
   };
 
   return (
@@ -54,7 +99,7 @@ const Comments = ({ toggleModal }) => {
             />
           </div>
 
-          <form onSubmit={submitNewComment}>
+          <form onSubmit={createComment}>
             <div className="flex">
               <input
                 className="w-full p-2 mr-2 focus:outline-none rounded shadow-gray shadow-lg"
@@ -70,10 +115,14 @@ const Comments = ({ toggleModal }) => {
             </div>
           </form>
         </div>
-      
-        {comments && comments.map((comment) => (
-          <CommentComponent comment={comment}/>
-        ))}
+        <div ref={parent}>
+          {commentInfo &&
+            commentInfo.map(({ comment, username, key }) => (
+              <div index={key}>
+                <CommentComponent comment={comment} username={username} />
+              </div>
+            ))}
+        </div>
       </aside>
     </>
   );

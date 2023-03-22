@@ -1,7 +1,10 @@
 import Head from "next/head";
 import Landing from "@/components/landing";
 
+
 export default function Home() {
+
+
   return (
     <>
       <Head>
