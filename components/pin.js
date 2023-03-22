@@ -14,7 +14,7 @@ function Pin({ pin, index, session }) {
       if(imageId === null) {
         throw "Image is null"
       }
-      console.log(`Im recipe ${recipeId} trying to access image ${imageId}`)
+      // console.log(`Im recipe ${recipeId} trying to access image ${imageId}`)
 
       const response = await axios.get(`http://localhost:8000/recipes/${recipeId}/images/${imageId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -22,7 +22,8 @@ function Pin({ pin, index, session }) {
 
       // Something needs to be fixed here so the image is displayed:
       // - - - - - - - - - -
-      const blob = response.data
+      const blob = new Blob([response.data], { type: response.headers["content-type"] })
+      console.log(blob)
       const url = URL.createObjectURL(blob)
       // - - - - - - - - - -
       setImageURL(url)
@@ -51,7 +52,6 @@ function Pin({ pin, index, session }) {
   useEffect(() => {
     const length = getRandomHeight(heights);
     setHeight(length);
-
     getRecipeImage(index, pin.image_id)
   });
 
