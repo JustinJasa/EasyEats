@@ -5,6 +5,8 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import Spinner from "./spinner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { toast } from 'react-toastify';
+import { useRouter } from "next/router";
 
 function CreateRecipe({ session }) {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -32,6 +34,7 @@ function CreateRecipe({ session }) {
   const [parent, enableAnimations] = useAutoAnimate();
   const token = session.user.token;
   const userId = session.user.account[0].user_id;
+  const router = useRouter()
 
   //GET - fetches all categories
   const getAllCategories = async () => {
@@ -194,8 +197,21 @@ function CreateRecipe({ session }) {
       await postRecipeImages(recipeId, selectedImagesFile);
 
       localStorage.clear()
+      toast.success('🖊️ Recipe Created!', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+      router.push("/main")
+      
     } catch (error) {
       console.log(error);
+
     }
   };
 
