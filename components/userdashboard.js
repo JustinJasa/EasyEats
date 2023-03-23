@@ -5,14 +5,14 @@ import MobileMenu from './mobilemenu'
 import { useMediaQuery } from '@/hooks/hooks'
 
 
-function UserDashboard() {
+function UserDashboard({session}) {
   let isMobile = useMediaQuery(640)
 
 
   return (
     <div className='flex flex-col md:ml-52'>
         {isMobile && <MobileMenu/>}
-        <PinGallery/>
+        <PinGallery session={session}/>
     </div>
 
   )
