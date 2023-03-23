@@ -3,6 +3,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import CommentComponent from "./comment";
 import axios from "axios";
+import { createSuccessToast } from "@/utils/toastNotification";
 
 const Comments = ({ toggleModal, token, session, id }) => {
   {
@@ -18,7 +19,7 @@ const Comments = ({ toggleModal, token, session, id }) => {
   const [parent, enableAnimations] = useAutoAnimate();
 
   const userId = session.user.account[0].user_id;
-  const username = session.user.account[0].username
+  const username = session.user.account[0].username;
 
   const getRecipeComments = async (recipeId) => {
     try {
@@ -45,7 +46,7 @@ const Comments = ({ toggleModal, token, session, id }) => {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
       return response.data;
     } catch (error) {
@@ -60,6 +61,7 @@ const Comments = ({ toggleModal, token, session, id }) => {
       e.target.reset();
       const newResponse = await getRecipeComments(id);
       setCommentInfo(newResponse);
+      createSuccessToast("Comment Created ✅");
     } catch (error) {
       console.log(error);
     }
@@ -91,12 +93,10 @@ const Comments = ({ toggleModal, token, session, id }) => {
         </div>
         <div>
           <div className="mt-2 mb-2 flex items-center">
-            <h4 className="font-bold">Justin</h4>
-            <img
-              className="ml-2 h-6 w-6 rounded-full"
-              src="https://picsum.photos/20/20"
-              alt=""
-            />
+            <h4 className="font-bold mr-2">{username}</h4>
+            <p className="text-sm bg-gray-300 text-center p-2 rounded-full">
+              {username.charAt(0)}
+            </p>
           </div>
 
           <form onSubmit={createComment}>

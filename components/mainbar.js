@@ -15,14 +15,14 @@ function Mainbar({session}) {
       />
       <div className="flex justify-center items-center">
         <Link href={`/create`}>
-          <div className="flex bg-black justify-center items-center mr-4 rounded-lg p-2 text-white">
+          <div className="flex bg-black justify-center items-center mr-4 rounded-lg p-2 text-white hover:bg-gray-700">
             <PlusIcon className="h-8 w-8 sm:h-4 sm:w-4 mr-2" />
             <p className="hidden sm:block">Create Recipe</p>
           </div>
         </Link>
         {session && (
           <Link href={`/users/${session.user.account[0].username}`}>
-          <div className="flex bg-green-600 justify-center items-center mr-4 rounded-lg p-2 text-white">
+          <div className="flex bg-green-600 justify-center items-center mr-4 rounded-lg p-2 text-white hover:bg-green-800">
             <UserIcon className="h-8 w-8 sm:h-4 sm:w-4 mr-2" />
             <p className="hidden sm:block">{session.user.account[0].username}</p>
           </div>
