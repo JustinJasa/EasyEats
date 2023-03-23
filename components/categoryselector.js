@@ -10,7 +10,7 @@ function CategorySelector({session}) {
   // const { data, error, isLoading } = useSWR('/localhost:8000/categories', fetcher)
   const [categories, setCategories] = useState([]);
 
-  console.log(session)
+  // console.log(session)
 
   const token = session.user.token
 
