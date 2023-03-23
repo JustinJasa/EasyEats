@@ -283,7 +283,7 @@ function CreateRecipe({ session }) {
         </p>
       )}
       <div className=" flex flex-col justify-center items-center bg-white lg:p-5 p-3 lg:w-3/5 w-full mt-12">
-        <h2 className="text-4xl font-bold mb-4">Create a Recipe 🥘 </h2>
+        <h2 className="text-5xl font-bold mb-4 font-serif">Create a Recipe 🥘 </h2>
         <h4 className="text-lg italic mb-4">
           Share your wonderful recipe to world!
         </h4>

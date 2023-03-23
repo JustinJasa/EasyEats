@@ -155,8 +155,8 @@ function Recipe({recipeId, session}) {
         <h2 className="text-6xl font-serif font-bold mb-4 mt-4 text-center">
           {info.name && `${info.name}.`}
         </h2>
-        <p className="text-xl font-semibold text-center mb-2">
-          <span className="text-sm italic">{info.username}</span>
+        <p className="text-xl font-md text-center mb-2">
+          <span className="text-md italic">{info.username}</span>
         </p>
         <div className="flex justify-between py-4 my-2 border-dashed border-y-2 border-gray-600">
           <span className="text-m w-1/2 text-center align-middle border-r-2 border-gray-600">
@@ -167,7 +167,7 @@ function Recipe({recipeId, session}) {
               Price: { info.price_range }
           </span>
         </div>
-        <h3 className="text-xl text-center mb-2">
+        <h3 className="text-md text-center p-6">
           {info.description}
         </h3>
         <div className="self-center md:max-w-screen-lg  mb-4">
