@@ -261,7 +261,7 @@ let pins = [
 ];
 
 const breakpointColumnsObj = {
-  default: 4,
+  default: 5,
   1200: 3,
   1000: 2,
   500: 1,
