@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import {GiChefToque} from "react-icons/gi"
+
 
 
 function Sidebar({ categories }) {
@@ -7,11 +9,8 @@ function Sidebar({ categories }) {
     <>
   
       <aside className="h-full w-48  fixed overflow-scroll">
-        <img
-          className="w-32 h-32 m-auto"
-          src="https://img.icons8.com/ios/512/man-logo.png"
-          alt="Logo"
-        />
+        <GiChefToque className="h-32 w-32 m-auto pt-4 pb-4"/>
+
         <div className="pl-8">
           <h2 className="text-xl mt-4 mb-4 text-bold font-bold">
             Discover Food
