@@ -9,9 +9,7 @@ import { useRouter } from "next/router";
 function Mainbar({ session }) {
   const [query, setQuery] = useState("");
   const router = useRouter()
-
-  console.log(query)
-
+  
   return (
     <div className="flex flex-row justify-end md:p-6 md:mt-6 md:mb-6">
       <div className="md:mr-12 flex justify-center items-center">

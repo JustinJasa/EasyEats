@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {GiChefToque} from "react-icons/gi"
+import { useRouter } from "next/router";
 
 
 
 function Sidebar({ categories }) {
+
+  const router = useRouter()
+
   return (
     <>
   
@@ -19,11 +23,9 @@ function Sidebar({ categories }) {
             {categories &&
               categories.map((category, index) => {
                 return (
-                  // <Link href={`${category}`}> This will be put in later on
-                  <li className="pb pt-2 cursor-pointer italic text-gray-500" key={index}>
+                  <li className="pb pt-2 cursor-pointer italic text-gray-500" key={index} onClick={() => router.push(`/main?category=${category.name}`)}>
                     {category.name}
                   </li>
-                  // </Link>
                 );
               })}
           </nav>

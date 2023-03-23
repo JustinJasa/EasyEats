@@ -12,8 +12,11 @@ function Main({session}) {
 }
 
 //protect route
-export async function getServerSideProps({ req }){
+export async function getServerSideProps({ req }, context){
   const session = await getSession({ req })
+
+  // const query = context.query.search
+  // console.log(query)
 
   if(!session){
     return {
