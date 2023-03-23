@@ -148,25 +148,6 @@ function Recipe({recipeId, session}) {
     fetchImageFiles()
   }, [images])
 
-  const recipe = {
-    date: "Jan 9, 2023",
-    pictures: [
-      {
-        src: "https://picsum.photos/1000",
-        alt: "Picture 1",
-      },
-      {
-        src: "https://picsum.photos/1000",
-        alt: "Picture 2",
-      },
-      {
-        src: "https://picsum.photos/1000",
-        alt: "Picture 3",
-      },
-    ],
-  };
-
-
   return (
     <div className="flex flex-col w-4/6 m-auto px-2">
       <div className="h-screen flex flex-col">
