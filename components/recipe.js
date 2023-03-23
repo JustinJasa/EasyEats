@@ -12,6 +12,7 @@ function Recipe({recipeId, session}) {
 
   const [commentModal, setCommentModal] = useState(false);
   const [isShowing, setIsShowing] = useState(false);
+  const [images, setImages] = useState([])
   const [categories, setCategories] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
@@ -84,24 +85,68 @@ function Recipe({recipeId, session}) {
     }
   };
 
+  // GET - Recipe images by recipeId
+  const getRecipeImages = async (recipeId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/recipes/${recipeId}/images`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      return response.data
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   const toggleComments = () => {
     setCommentModal(!commentModal);
     setIsShowing(!isShowing);
   };
 
   async function fetchData() {
+    // Recipe info
     const infoResponse = await getRecipeInfo(id);
     setInfo(infoResponse[0]);
+
+    // Recipe images
+    const imagesResponse = await getRecipeImages(id)
+    setImages(imagesResponse)
+
+    // Recipe categories
     const categoriesResponse = await getRecipeCategories(id);
     setCategories(categoriesResponse);
+
+    // Recipe ingredients
     const ingredientsResponse = await getRecipeIngredients(id);
     setIngredients(ingredientsResponse);
+
+    // Recipe steps
     const stepsResponse = await getRecipeSteps(id);
     setSteps(stepsResponse);
   }
+
   useEffect(() => {
-    fetchData();
+    fetchData()
   }, []);
+
+  useEffect(() => {
+    async function fetchImageFiles() {
+      const newData = await Promise.all(
+        images.map(async (image) => {
+          const response = await fetch(`http://localhost:8000/recipes/${recipeId}/images/${image.image_id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          const blob = await response.blob()
+          const url = URL.createObjectURL(blob)
+          return { ...image, url }
+        })
+      )
+      setImages(newData)
+    }
+    fetchImageFiles()
+  }, [images])
 
   const recipe = {
     date: "Jan 9, 2023",
@@ -121,10 +166,11 @@ function Recipe({recipeId, session}) {
     ],
   };
 
+
   return (
     <div className="flex flex-col w-4/6 m-auto px-2">
       <div className="h-screen flex flex-col">
-        <h4 className="text-center">{recipe.date}</h4>
+        <h4 className="text-center">{info.date ? info.date.slice(0, 10) : "Sample date"}</h4>
         <h2 className="text-6xl font-serif font-bold mb-4 mt-4 text-center">
           {info.name && `${info.name}.`}
         </h2>
@@ -133,11 +179,12 @@ function Recipe({recipeId, session}) {
         </p>
         <div className="self-center md:max-w-screen-lg  mb-4">
           <ImageCarousel>
-            {recipe.pictures.map((picture) => (
+            {images.map((image) => (
               <img
                 className="w-full h-full object-fill rounded-xl"
-                src={picture.src}
-                alt={picture.alt}
+                src={image.url}
+                alt="Recipe picture"
+                key={image.image_id}
               />
             ))}
           </ImageCarousel>
