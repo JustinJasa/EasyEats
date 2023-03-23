@@ -17,7 +17,7 @@ function Mainbar({session}) {
         <Link href={`/create`}>
           <div className="flex bg-black justify-center items-center mr-4 rounded-lg p-2 text-white">
             <PlusIcon className="h-8 w-8 sm:h-4 sm:w-4 mr-2" />
-            <p className="hidden sm:block">Create Receipe</p>
+            <p className="hidden sm:block">Create Recipe</p>
           </div>
         </Link>
         {session && (
