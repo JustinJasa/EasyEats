@@ -27,6 +27,7 @@ function Pin({ pin, index, session }) {
       // const blob = new Blob([response.data], { type: response.headers["content-type"] })
       const blob = await response.blob()
       console.log(blob)
+      
       const url = URL.createObjectURL(blob)
       console.log(url)
       // - - - - - - - - - -
