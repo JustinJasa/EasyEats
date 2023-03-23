@@ -14,14 +14,14 @@ function Landing() {
         Freshly curated recipes by students around the world.
       </h3>
       <div className="flex items-center space-between">
-        <Link href={`/login`}>
+        <Link href={`/signup`}>
           <div className="mr-8">
             <button className="text-lg text-white bg-green-600 border-2 border-green-600 rounded-md lg:hover:scale-110 pl-20 pr-20 pt-2 pb-2 transition transition-duration: 150ms">
               Sign Up
             </button>
           </div>
         </Link>
-        <Link href={`/signup`}>
+        <Link href={`/login`}>
           <div>
             <button className="text-lg text-green-600 border-solid border-2 border-green-600  pl-20 pr-20 pt-2 pb-2  rounded-md transition transition-duration: 150ms lg:hover:scale-110">
               Sign In
