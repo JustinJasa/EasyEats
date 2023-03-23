@@ -1,11 +1,13 @@
 import React from "react";
 import Link from "next/link";
+import {GiChefToque} from "react-icons/gi"
 
 function Landing() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <div>
-        <img className="w-32 h-32" src="https://img.icons8.com/ios/512/man-logo.png" alt="Logo" />
+        {/* <img className="w-32 h-32" src="https://img.icons8.com/ios/512/man-logo.png" alt="Logo" /> */}
+        <GiChefToque className="h-16 w-16 mb-2"/>
       </div>
       <h1 className="font-serif lg:text-6xl">
         Food for students... by students.
