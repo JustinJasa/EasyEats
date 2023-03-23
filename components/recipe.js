@@ -158,6 +158,18 @@ function Recipe({recipeId, session}) {
         <p className="text-xl font-semibold text-center mb-2">
           <span className="text-sm italic">{info.username}</span>
         </p>
+        <div className="flex justify-between py-4 my-2 border-dashed border-y-2 border-gray-600">
+          <span className="text-m w-1/2 text-center align-middle border-r-2 border-gray-600">
+              Prep time: { info.time_hours !== 0 ? `${info.time_hours} h` : `` } { info.time_minutes !== 0 ? `${info.time_minutes} min` : `` }
+          </span>
+          {/* <span className=" w-1/6 text-center">|</span> */}
+          <span className="text-m w-1/2 text-center align-middle">
+              Price: { info.price_range }
+          </span>
+        </div>
+        <h3 className="text-xl text-center mb-2">
+          {info.description}
+        </h3>
         <div className="self-center md:max-w-screen-lg  mb-4">
           <ImageCarousel>
             {images.map((image) => (
