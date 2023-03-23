@@ -20,11 +20,6 @@ function Pin({ pin, index, session }) {
         headers: { Authorization: `Bearer ${token}` },
       })
 
-      // console.log(response.blob())
-
-      // Something needs to be fixed here so the image is displayed:
-      // - - - - - - - - - -
-      // const blob = new Blob([response.data], { type: response.headers["content-type"] })
       const blob = await response.blob()
       console.log(blob)
       
@@ -75,7 +70,6 @@ function Pin({ pin, index, session }) {
       <h2 className="font-bold font-serif text-xl mt-2">{pin.name}</h2>
       <div className="mt-2 flex">
         <h3 className="font-bold mr-2">{pin.username}</h3>
-        {/* <img className="rounded-lg" src={pin.profileImage} alt="Author Image" /> */}
       </div>
     </div>
   );
