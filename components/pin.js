@@ -73,7 +73,7 @@ function Pin({ pin, index, session }) {
   }, []);
 
   return (
-    <div key={index} className={`align-center content-center rounded-xl m-4 p-1 shadow-md`}>
+    <div key={index} className={`align-center content-center rounded-xl m-4 p-2 shadow-md`}>
       {
         imageURL && (
           <img
@@ -83,7 +83,7 @@ function Pin({ pin, index, session }) {
           ></img>
         )
       }
-      <h2 className="italic text-sm text-gray-500 mt-2">{pin.date ? pin.date.slice(0, 10) : "Sample date"}</h2>
+      <h2 className="italic text-sm text-gray-500 mt-2 mb-2">{pin.date ? pin.date.slice(0, 10) : "Sample date"}</h2>
       <div className="flex flex-wrap">
       {
         categories && categories.map((category, index) => {
