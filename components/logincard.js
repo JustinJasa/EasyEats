@@ -6,6 +6,7 @@ import {useFormik} from 'formik'
 import { ValidateLogin } from "@/lib/validateForms";
 import { useRouter } from "next/router";
 
+
 export default function LoginCard() {
 
 
@@ -43,7 +44,7 @@ export default function LoginCard() {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div className="max-w-[400px] w-full mx-auto bg-white p-8 px-8 rounded-lg text-center">
+      <div className="max-w-[400px] w-full mx-auto bg-white p-8 px-8 rounded-lg text-center shadow-lg shadow-gray-400">
         <h2 className="text-3xl font-bold mb-2">Log In</h2>
         {formik.errors.email && formik.touched.email ? (
           <span className="text-rose-600">{formik.errors.email}</span>

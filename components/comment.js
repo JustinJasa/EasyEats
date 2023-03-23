@@ -2,8 +2,6 @@ import React from "react";
 
 function CommentComponent({ comment, username }) {
 
-  
-
   return (
     <>
       <hr />
