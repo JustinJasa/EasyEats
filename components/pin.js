@@ -71,7 +71,7 @@ function Pin({ pin, index, session }) {
           ></img>
         )
       }
-      <h2 className="italic text-sm text-gray-500 mt-2">{pin.date ? pin.date : "Sample date"}</h2>
+      <h2 className="italic text-sm text-gray-500 mt-2">{pin.date ? pin.date.slice(0, 10) : "Sample date"}</h2>
       <h2 className="font-bold font-serif text-xl mt-2">{pin.name}</h2>
       <div className="mt-2 flex">
         <h3 className="font-bold mr-2">{pin.username}</h3>
