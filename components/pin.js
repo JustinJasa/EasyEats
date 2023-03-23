@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
+import axios from "axios";
 
 function Pin({ pin, index, session }) {
-  const [imageURL, setImageURL] = useState(null)
+  const [imageURL, setImageURL] = useState("https://picsum.photos/300")
+  const [categories, setCategories] = useState([])
   const [height, setHeight] = useState();
   const heights = [24, 48, 32, 80];
 
@@ -14,18 +15,14 @@ function Pin({ pin, index, session }) {
       if(imageId === null) {
         throw "Image is null"
       }
-      // console.log(`Im recipe ${recipeId} trying to access image ${imageId}`)
 
       const response = await fetch(`http://localhost:8000/recipes/${recipeId}/images/${imageId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
 
       const blob = await response.blob()
-      console.log(blob)
       
       const url = URL.createObjectURL(blob)
-      console.log(url)
-      // - - - - - - - - - -
       setImageURL(url)
     }
     catch(error) {
@@ -42,6 +39,20 @@ function Pin({ pin, index, session }) {
     }
   }
 
+  const getRecipeCategories = async (recipeId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/recipes/${recipeId}/categories`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      return response.data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   function getRandomHeight(heights) {
     // generate a random index between 0 and the length of the array minus 1
     const randomIndex = Math.floor(Math.random() * heights.length);
@@ -49,14 +60,20 @@ function Pin({ pin, index, session }) {
     return heights[randomIndex];
   }
 
+  async function fetchCategories() {
+    const response = await getRecipeCategories(index)
+    setCategories(response)
+  }
+
   useEffect(() => {
     const length = getRandomHeight(heights);
     setHeight(length);
     getRecipeImage(index, pin.image_id)
+    fetchCategories()
   }, []);
 
   return (
-    <div key={index} className={`align-center content-center rounded-xl m-4`}>
+    <div key={index} className={`align-center content-center rounded-xl m-4 p-1 shadow-md`}>
       {
         imageURL && (
           <img
@@ -67,10 +84,22 @@ function Pin({ pin, index, session }) {
         )
       }
       <h2 className="italic text-sm text-gray-500 mt-2">{pin.date ? pin.date.slice(0, 10) : "Sample date"}</h2>
-      <h2 className="font-bold font-serif text-xl mt-2">{pin.name}</h2>
-      <div className="mt-2 flex">
-        <h3 className="font-bold mr-2">{pin.username}</h3>
+      <div className="flex flex-wrap">
+      {
+        categories && categories.map((category, index) => {
+          return (
+            <span
+              key={index}
+              className="border-2 rounded-2xl border-green-400 px-2 py-1 mr-1 text-xs"
+            >
+              {category.name}
+            </span>
+          )
+        })
+      }
       </div>
+      <h2 className="font-bold font-serif text-xl mt-2">{pin.name}</h2>
+      <h3 className="font-bold mr-2">{pin.username}</h3>
     </div>
   );
 }
