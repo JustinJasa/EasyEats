@@ -3,6 +3,8 @@ import Layout from "@/components/layout";
 import localFont from "@next/font/local";
 import { AnimatePresence } from "framer-motion";
 import { SessionProvider } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const gloock = localFont({
   src: [
@@ -34,6 +36,7 @@ export default function App({ Component, pageProps, router }) {
           >
             <main className={`${gloock.variable} font-sans`}>
               <Component {...pageProps} key={router.asPath} />
+              <ToastContainer/>
             </main>
           </AnimatePresence>
         </Layout>

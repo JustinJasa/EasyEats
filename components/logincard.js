@@ -5,6 +5,7 @@ import { signIn, signOut } from "next-auth/react";
 import {useFormik} from 'formik'
 import { ValidateLogin } from "@/lib/validateForms";
 import { useRouter } from "next/router";
+import { createErrorToast } from "@/utils/toastNotification";
 
 
 export default function LoginCard() {
@@ -22,6 +23,7 @@ export default function LoginCard() {
     });
 
     if(res.ok) router.push(res.url)
+    else createErrorToast("Credentials were incorrect ❌ Try again!")
 
   };
 

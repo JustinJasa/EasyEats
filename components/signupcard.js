@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { ValidateSignUp } from "@/lib/validateForms";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { createSuccessToast, createErrorToast } from "@/utils/toastNotification";
 
 
 const register = async (username, email, password) => {
@@ -24,15 +25,16 @@ export default function SignUpCard() {
   const router = useRouter()
 
   const signUp = async (values) => {
-    const {username, email, password} = values
+    const {username, email, password, confirmPassword} = values
     const res = await register(username, email, password)
 
-
     if(!res){
+      createErrorToast("Sorry something when wrong 😭 Try Again!")
       throw new Error("Could not register account. Try Again!")
     }
 
     router.push("http://localhost:3000/login")
+    createSuccessToast("Account Created 😌 Please login!")
 
   };
 
@@ -96,6 +98,9 @@ export default function SignUpCard() {
           <></>
         )}
 
+        {console.log(formik.errors.password)}
+
+
         <div className="flex justify-center mb-2">
           <div className="bg-gray-100 flex items-center w-64 p-2">
             <FaKey className="mr-2" />
@@ -114,6 +119,8 @@ export default function SignUpCard() {
         ) : (
           <></>
         )}
+
+        {console.log(formik.errors.confirmPassword)}
 
         <div className="flex justify-center">
           <div className="bg-gray-100 flex items-center w-64 p-2">

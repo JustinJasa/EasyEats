@@ -9,7 +9,10 @@ function Sidebar({ categories }) {
     <>
   
       <aside className="h-full w-48  fixed overflow-scroll">
-        <GiChefToque className="h-32 w-32 m-auto pt-4 pb-4"/>
+        <Link href={'/main'}>
+          <GiChefToque className="h-32 w-32 m-auto pt-4 pb-4"/>
+        </Link>
+        
 
         <div className="pl-8">
           <h2 className="text-xl mt-4 mb-4 text-bold font-bold">
