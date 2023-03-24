@@ -316,7 +316,7 @@ function CreateRecipe({ session }) {
                 </div>
 
                 <p className="mt-32 text-gray-400">
-                  Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF or
+                  Recommendation: Use high-quality JPG, JPEG, SVG, PNG, GIF, AVIF or
                   TIFF less than 20MB
                 </p>
                 <input
@@ -324,7 +324,7 @@ function CreateRecipe({ session }) {
                   name="upload-image"
                   className="w-0 h-0"
                   multiple
-                  accept="image/png , image/jpeg, image/webp, image/gif, image/tiff, image/jpg"
+                  accept="image/png , image/jpeg, image/webp, image/gif, image/tiff, image/jpg, image/avif"
                   onChange={uploadImage}
                 />
               </div>
