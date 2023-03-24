@@ -158,7 +158,7 @@ function Recipe({recipeId, session}) {
         <p className="text-xl font-md text-center mb-2">
           <span className="text-md italic">{info.username}</span>
         </p>
-        <div className="flex justify-between py-4 my-2 border-dashed border-y-2 border-gray-600">
+        <div className="flex justify-between py-4 my-2 border-solid border-y-2 border-gray-600">
           <span className="text-m w-1/2 text-center align-middle border-r-2 border-gray-600">
               Prep time: { info.time_hours !== 0 ? `${info.time_hours} h` : `` } { info.time_minutes !== 0 ? `${info.time_minutes} min` : `` }
           </span>
