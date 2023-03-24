@@ -7,6 +7,8 @@ function Mainbar({ session }) {
   const [query, setQuery] = useState("");
   const router = useRouter();
 
+  console.log(session)
+
   return (
     <div className="flex flex-row justify-end md:p-6 md:mt-6 md:mb-6">
       <div className="md:mr-12 flex justify-center items-center">
@@ -33,14 +35,12 @@ function Mainbar({ session }) {
           </div>
         </Link>
         {session && (
-          <Link href={`/users/${session.user.account[0].username}`}>
-            <div className="flex bg-green-600 justify-center items-center mr-4 rounded-lg p-2 text-white hover:bg-green-800">
+            <div className="flex bg-green-600 justify-center items-center mr-4 rounded-lg p-2 text-white hover:bg-green-800" onClick={() => router.push(`/users/${session.user.account[0].user_id}`)}>
               <UserIcon className="h-8 w-8 sm:h-4 sm:w-4 mr-2" />
               <p className="hidden sm:block">
                 {session.user.account[0].username}
               </p>
             </div>
-          </Link>
         )}
       </div>
     </div>
