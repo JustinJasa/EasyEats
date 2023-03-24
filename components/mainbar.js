@@ -10,15 +10,15 @@ function Mainbar({ session }) {
   return (
     <div className="flex flex-row justify-end md:p-6 md:mt-6 md:mb-6">
       <div className="md:mr-12 flex justify-center items-center">
-        <div class="flex items-center">
+        <div className="flex items-center">
           <input
             type="text"
             placeholder="Search"
-            class="md:w-72 w-48 py-2 px-4 border-gray-300 rounded-l-lg focus:outline-none shadow-lg drop-shadow-md"
+            className="md:w-72 w-48 py-2 px-4 border-gray-300 rounded-l-lg focus:outline-none shadow-lg drop-shadow-md"
             onChange={(e) => setQuery(e.target.value)}
           />
           <button
-            class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-r-lg shadow-lg drop-shadow-md"
+            className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-r-lg shadow-lg drop-shadow-md"
             onClick={() => router.push(`/main?search=${query}`)}
           >
             🔎 Search
