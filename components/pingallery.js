@@ -40,7 +40,6 @@ function PinGallery({ session }) {
   };
 
   const getSearchRecipesByName = async () => {
-    console.log(searchQuery.search === "" ? `Empty` : `Not empty`)
     // If search query is empty, fetch all recipes route
     const route = searchQuery.search === "" ? `http://localhost:8000/recipes/all` : `http://localhost:8000/recipes/name/${searchQuery.search}`
     try {
@@ -58,8 +57,10 @@ function PinGallery({ session }) {
 
   const getSearchRecipesByCategory = async () => {
     try {
+      console.log(searchQuery.category === "" ? `Empty` : `Not empty`)
+      const route = searchQuery.category === "" ? `http://localhost:8000/recipes/all` : `http://localhost:8000/recipes/category/${searchQuery.category}`
       const response = await axios.get(
-        `http://localhost:8000/recipes/category/${searchQuery.category}`,
+        route,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
