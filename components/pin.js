@@ -77,7 +77,7 @@ function Pin({ pin, index, session }) {
       {
         imageURL && (
           <img
-            className={`rounded-2xl h-${height} w-full`}
+            className={`rounded-2xl h-${height} w-full object-cover`}
             src={imageURL}
             alt="Main pin image"
           ></img>
