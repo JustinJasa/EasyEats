@@ -73,7 +73,7 @@ function Pin({ pin, index, session }) {
   }, []);
 
   return (
-    <div key={index} className={`align-center content-center rounded-xl m-4 p-2 shadow-md`}>
+    <div key={index} className={`align-center content-center rounded-xl m-4 p-2 shadow-xl`}>
       {
         imageURL && (
           <img
