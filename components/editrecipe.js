@@ -56,14 +56,14 @@ function EditRecipe({ session }) {
   }, []);
 
   useEffect(() => {
-    console.log("These are the selected images", selectedImages)
-  }, [selectedImages])
+    console.log("These are the selected images", selectedImages);
+  }, [selectedImages]);
 
   useEffect(() => {
     async function renderImageFiles() {
       const newData = await Promise.all(
         selectedImages.map(async (image) => {
-            console.log(image)
+          console.log(image);
           const response = await fetch(
             `http://localhost:8000/recipes/${recipeId}/images/${image.image_id}`,
             {
@@ -71,9 +71,9 @@ function EditRecipe({ session }) {
             }
           );
           const blob = await response.blob();
-          console.log(blob)
+          console.log(blob);
           const url = URL.createObjectURL(blob);
-          console.log(url)
+          console.log(url);
           return { image, url };
         })
       );
@@ -84,7 +84,6 @@ function EditRecipe({ session }) {
     renderImageFiles();
   }, []);
 
- 
   //GET - fetches all categories
   const getAllCategories = async () => {
     try {
@@ -115,7 +114,6 @@ function EditRecipe({ session }) {
       console.log(error);
     }
   };
-
 
   const getRecipeBasicData = async () => {
     try {
@@ -215,7 +213,7 @@ function EditRecipe({ session }) {
   };
 
   // POST - Recipe info
-  const postRecipeInfo = async (
+  const updateRecipeInfo = async (
     userId,
     name,
     description,
@@ -224,8 +222,8 @@ function EditRecipe({ session }) {
     price
   ) => {
     try {
-      const response = await axios.post(
-        `http://localhost:8000/recipes/new`,
+      const response = await axios.put(
+        `http://localhost:8000/recipes/${recipeId}/edit`,
         {
           userId: userId,
           name: name,
@@ -247,8 +245,8 @@ function EditRecipe({ session }) {
   // PUT - Recipe categories
   const updateRecipeCategories = async (recipeId, categories) => {
     try {
-      const response = await axios.post(
-        `http://localhost:8000/recipes/${recipeId}/categories/new`,
+      const response = await axios.put(
+        `http://localhost:8000/recipes/${recipeId}/categories/edit`,
         {
           categories: categories,
         },
@@ -275,8 +273,8 @@ function EditRecipe({ session }) {
     // }
 
     try {
-      const response = await axios.post(
-        `http://localhost:8000/recipes/${recipeId}/images/new`,
+      const response = await axios.put(
+        `http://localhost:8000/recipes/${recipeId}/images/edit`,
         formData,
         {
           headers: {
@@ -294,8 +292,8 @@ function EditRecipe({ session }) {
   // PUT - Recipe ingredients
   const updaRecipeIngredients = async (recipeId, ingredients) => {
     try {
-      const response = await axios.post(
-        `http://localhost:8000/recipes/${recipeId}/ingredients/new`,
+      const response = await axios.put(
+        `http://localhost:8000/recipes/${recipeId}/ingredients/edit`,
         {
           ingredients: ingredients,
         },
@@ -312,8 +310,8 @@ function EditRecipe({ session }) {
   // PUT - Recipe steps
   const updateRecipeSteps = async (recipeId, steps) => {
     try {
-      const response = await axios.post(
-        `http://localhost:8000/recipes/${recipeId}/steps/new`,
+      const response = await axios.put(
+        `http://localhost:8000/recipes/${recipeId}/steps/edit`,
         {
           steps: steps,
         },
@@ -328,37 +326,34 @@ function EditRecipe({ session }) {
   };
 
   const editRecipe = async () => {
-    let recipe = {
-      name,
-      description,
-      timeHours,
-      timeMinutes,
-      price,
-      categories,
-      ingredients,
-      instructions,
-    };
-    localStorage.setItem("recipe", JSON.stringify(recipe));
-
     try {
-      recipe = await postRecipeInfo(
+      await updateRecipeInfo(
         userId,
-        recipe.name,
-        recipe.description,
-        recipe.timeHours,
-        recipe.timeMinutes,
-        recipe.price
+        name,
+        description,
+        timeHours,
+        timeMinutes,
+        price
       );
-      const recipeId = recipe[0].recipe_id;
 
       // Call the other three functions with the recipeId
-      await postRecipeCategories(recipeId, category);
-      await postRecipeIngredients(recipeId, ingredients);
-      await postRecipeSteps(recipeId, instructions);
-      await postRecipeImages(recipeId, selectedImagesFile);
+      console.log(userId)
+      console.log(name)
+      console.log(description)
+      console.log(timeHours)
+      console.log(timeMinutes)
+      console.log(price)
+      console.log(category)
+      console.log(ingredients)
+      console.log(instructions)
+      console.log(selectedImagesFile)
+      await updateRecipeCategories(recipeId, category);
+      await updaRecipeIngredients(recipeId, ingredients);
+      await updateRecipeSteps(recipeId, instructions);
+      await updateRecipeImages(recipeId, selectedImagesFile);
 
       localStorage.clear();
-      toast.success("🖊️ Recipe Created!", {
+      toast.success("Recipe Updated!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
