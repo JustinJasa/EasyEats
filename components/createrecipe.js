@@ -180,17 +180,6 @@ function CreateRecipe({ session }) {
     };
     localStorage.setItem("recipe", JSON.stringify(recipe));
 
-    // console.log("TITLE: ", recipe.name, !!recipe.name)
-    // console.log("DESCRIPTION:", recipe.description, !!recipe.description)
-    // console.log("PRICE:", recipe.price, !!recipe.price)
-    // console.log("HOURS:", recipe.timeHours, !!recipe.timeHours)
-    // console.log("MINUTES:", recipe.timeMinutes, !!recipe.timeMinutes)
-    // console.log("CATEGORIES:", category, !!category)
-    // console.log("INGREDIENTS:", ingredients, !!ingredients.length)
-    // console.log("STEPS:", instructions, !!instructions.length)
-    // console.log("IMAGES:", selectedImages, !!selectedImages)
-    // console.log("- - - - - - - - - - ")
-
     const formIsReady = () => {
       return !!recipe.name && !!recipe.description && !!recipe.price && !!recipe.timeHours && !!recipe.timeMinutes && 
              !!category && !!ingredients.length && !!instructions.length && !!selectedImages
