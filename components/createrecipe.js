@@ -421,7 +421,7 @@ function CreateRecipe({ session }) {
               className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
             />
           </div>
-          <h4 className="text-xl font-bold">Price</h4>
+          <h4 className="text-xl font-bold">Price.</h4>
           <select
             value={price}
             onChange={(event) => {
@@ -436,14 +436,14 @@ function CreateRecipe({ session }) {
           </select>{" "}
           <div>
             <h4 className="mb-2 font-bold text:lg sm:text-xl">
-              Choose Recipe Category.
+              Choose Recipe Categories.
             </h4>
             <div className="flex justify-between">
               <select
                 className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
                 onChange={categoryChange}
               >
-                <option value="" selected disabled>Select Category</option>
+                <option value="" selected disabled>Select Categories</option>
                 {categories &&
                   categories.map((item, index) => (
                     <>
@@ -520,7 +520,7 @@ function CreateRecipe({ session }) {
             </div>
           </div>
           <div className="flex justify-between pr-4 items-center">
-            <h2 className="font-bold text-2xl mb-2">Steps</h2>
+            <h2 className="font-bold text-2xl mb-2">Steps.</h2>
             <PlusIcon
               className="h-8 w-8 lg:h-6 lg:w-6 mr-2 bg-black text-white rounded-lg"
               onClick={() => setInstructionModal(!instructionModal)}
