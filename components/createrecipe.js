@@ -520,7 +520,7 @@ function CreateRecipe({ session }) {
             </div>
           </div>
           <div className="flex justify-between pr-4 items-center">
-            <h2 className="font-bold text-2xl mb-2">Instructions</h2>
+            <h2 className="font-bold text-2xl mb-2">Steps</h2>
             <PlusIcon
               className="h-8 w-8 lg:h-6 lg:w-6 mr-2 bg-black text-white rounded-lg"
               onClick={() => setInstructionModal(!instructionModal)}
