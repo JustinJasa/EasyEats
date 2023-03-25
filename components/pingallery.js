@@ -29,7 +29,6 @@ function PinGallery({ session }) {
   const searchParameter = router.asPath;
   const searchQuery = router.query;
 
-  console.log(searchParameter)
 
   const getAllRecipes = async () => {
     try {
@@ -68,7 +67,6 @@ function PinGallery({ session }) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response)
       setPins(response.data);
     } catch (error) {
       console.log(error);
@@ -77,7 +75,6 @@ function PinGallery({ session }) {
 
   const getSearchedRecipesByCategory = async () => {
     try {
-      console.log(searchQuery.category === "" ? `Empty` : `Not empty`)
       const route = searchQuery.category === "" ? `http://localhost:8000/recipes/all` : `http://localhost:8000/recipes/category/${searchQuery.category}`
       const response = await axios.get(
         route,

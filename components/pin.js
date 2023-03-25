@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { HiPencil } from "react-icons/hi";
-import Link from "next/link";
 import { createSuccessToast } from "@/utils/toastNotification";
-
+import { useRouter } from "next/router";
 import axios from "axios";
+import Link from "next/link";
 
 function Pin({ pin, index, session, searchParameter, id }) {
   const [imageURL, setImageURL] = useState("https://picsum.photos/300");
@@ -12,10 +12,11 @@ function Pin({ pin, index, session, searchParameter, id }) {
   const [height, setHeight] = useState();
   const heights = [24, 48, 32, 80];
 
-  console.log(pin)
 
   const token = session.user.token;
   const userId = session.user.account[0].user_id;
+  const router = useRouter()
+
 
   const urlParameter = searchParameter;
 
@@ -95,6 +96,7 @@ function Pin({ pin, index, session, searchParameter, id }) {
   const deleteRecipeHandler = async (id) => {
     const response = await deleteRecipeRequest(id)
     createSuccessToast("Recipe Successfully Deleted!")
+    setDeleteModal(!deleteModal)
     return response.data
   }
 
@@ -140,7 +142,7 @@ function Pin({ pin, index, session, searchParameter, id }) {
 
       {urlParameter.includes("users") && (
         <div className="flex items-center justify-between mt-4">
-          <button className="text-2xl mr-4 p-1  cursor-pointer">
+          <button className="text-2xl mr-4 p-1 cursor-pointer" onClick={() => router.push(`/edit/${pin.recipe_id}`)}>
             ✏️
           </button>
           <button className="text-2xl p-1 cursor-pointer" onClick={() => setDeleteModal(!deleteModal)}>
