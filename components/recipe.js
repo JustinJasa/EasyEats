@@ -10,6 +10,8 @@ function Recipe({recipeId, session}) {
   const id = recipeId
   const token = session.user.token;
 
+  const dateFormatLength = 10;
+
   const [commentModal, setCommentModal] = useState(false);
   const [isShowing, setIsShowing] = useState(false);
   const [images, setImages] = useState([])
@@ -151,7 +153,7 @@ function Recipe({recipeId, session}) {
   return (
     <div className="flex flex-col w-4/6 m-auto px-2">
       <div className="h-screen flex flex-col">
-        <h4 className="text-center">{info.date ? info.date.slice(0, 10) : "Sample date"}</h4>
+        <h4 className="text-center">{info.date ? info.date.slice(0, dateFormatLength) : "Sample date"}</h4>
         <h2 className="text-6xl font-serif font-bold mb-4 mt-4 text-center">
           {info.name && `${info.name}.`}
         </h2>

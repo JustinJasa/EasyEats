@@ -9,6 +9,7 @@ function CommentComponent({ comment, username, date, userId, recipeId, commentId
   const [commentVisible, setCommentVisible] = useState(true);
   const [editComment, setEditComment] = useState(false);
   const token = session.user.token;
+  const dateFormatLength = 10;
 
   const updateCommentRequest = async (commentId) => {
     try {
@@ -69,7 +70,7 @@ function CommentComponent({ comment, username, date, userId, recipeId, commentId
 
               <div className="flex flex-col ml-2">
                 <h4 className="font-bold">{username}</h4>
-                <p className="italic text-slate-500 text-sm">{ date ? date.slice(0, 10) : "Unable to get date"}</p>
+                <p className="italic text-slate-500 text-sm">{ date ? date.slice(0, dateFormatLength) : "Unable to get date"}</p>
               </div>
             </div>
             <p className="pt-4 pb-4 max-h-32 overflow-y-auto">{commentText}</p>
