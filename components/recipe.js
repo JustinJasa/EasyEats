@@ -222,9 +222,6 @@ function Recipe({recipeId, session}) {
         </ol>
 
         <div className="text-center">
-          <button className="border-2 bg-green-600 rounded-full font-semibold text-white px-12 py-2 my-2">
-            Likes
-          </button>
           <button
             className="border-2 bg-green-600 rounded-full font-semibold text-white px-12 py-2 my-2 cursor-pointer"
             onClick={toggleComments}
