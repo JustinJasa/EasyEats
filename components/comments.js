@@ -35,14 +35,13 @@ const Comments = ({ toggleModal, token, session, id }) => {
     }
   };
 
-  const postRecipeComment = async (recipeId, userId, comment, rating) => {
+  const postRecipeComment = async (recipeId, userId, comment) => {
     try {
       const response = await axios.post(
         `http://localhost:8000/recipes/${recipeId}/comments/new`,
         {
           userId: userId,
           comment: comment,
-          rating: rating,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -57,7 +56,7 @@ const Comments = ({ toggleModal, token, session, id }) => {
   const createComment = async (e) => {
     try {
       e.preventDefault();
-      await postRecipeComment(id, userId, newComment, 5);
+      await postRecipeComment(id, userId, newComment);
       e.target.reset();
       const newResponse = await getRecipeComments(id);
       setCommentInfo(newResponse);
@@ -117,9 +116,9 @@ const Comments = ({ toggleModal, token, session, id }) => {
         </div>
         <div ref={parent}>
           {commentInfo &&
-            commentInfo.map(({ comment, username, key }) => (
-              <div index={key}>
-                <CommentComponent comment={comment} username={username} />
+            commentInfo.map(({ comment, username, comment_id, date, user_id }) => (
+              <div key={comment_id}>
+                <CommentComponent comment={comment} username={username} date={date} userId={user_id} recipeId={id} commentId={comment_id} session={session} />
               </div>
             ))}
         </div>
