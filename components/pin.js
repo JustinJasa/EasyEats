@@ -11,7 +11,7 @@ function Pin({ pin, index, session, searchParameter, id }) {
   const [deleteModal, setDeleteModal] = useState();
   const [height, setHeight] = useState();
   const heights = [24, 48, 32, 80];
-
+  const dateFormatLength = 10;
 
   const token = session.user.token;
   const userId = session.user.account[0].user_id;
@@ -121,7 +121,7 @@ function Pin({ pin, index, session, searchParameter, id }) {
           ></img>
         )}
         <h2 className="italic text-sm text-gray-500 mt-2 mb-2">
-          {pin.date ? pin.date.slice(0, 10) : "Sample date"}
+          {pin.date ? pin.date.slice(0, dateFormatLength) : "Sample date"}
         </h2>
         <div className="flex flex-wrap">
           {categories &&
