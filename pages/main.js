@@ -15,8 +15,6 @@ function Main({session}) {
 export async function getServerSideProps({ req }, context){
   const session = await getSession({ req })
 
-  // const query = context.query.search
-  // console.log(query)
 
   if(!session){
     return {

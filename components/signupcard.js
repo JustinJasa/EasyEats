@@ -98,7 +98,6 @@ export default function SignUpCard() {
           <></>
         )}
 
-        {console.log(formik.errors.password)}
 
 
         <div className="flex justify-center mb-2">
@@ -120,7 +119,6 @@ export default function SignUpCard() {
           <></>
         )}
 
-        {console.log(formik.errors.confirmPassword)}
 
         <div className="flex justify-center">
           <div className="bg-gray-100 flex items-center w-64 p-2">
