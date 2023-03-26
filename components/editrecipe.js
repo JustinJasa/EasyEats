@@ -8,6 +8,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { getRecipeIngredients } from "@/utils/apiRoutes";
+import { createSuccessToast } from "@/utils/toastNotification";
 
 function EditRecipe({ session }) {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -337,32 +338,14 @@ function EditRecipe({ session }) {
       );
 
       // Call the other three functions with the recipeId
-      console.log(userId)
-      console.log(name)
-      console.log(description)
-      console.log(timeHours)
-      console.log(timeMinutes)
-      console.log(price)
-      console.log(category)
-      console.log(ingredients)
-      console.log(instructions)
-      console.log(selectedImagesFile)
       await updateRecipeCategories(recipeId, category);
       await updaRecipeIngredients(recipeId, ingredients);
       await updateRecipeSteps(recipeId, instructions);
       await updateRecipeImages(recipeId, selectedImagesFile);
 
       localStorage.clear();
-      toast.success("Recipe Updated!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      createSuccessToast("Recipe Updated!!");
+
       router.push("/main");
     } catch (error) {
       console.log(error);

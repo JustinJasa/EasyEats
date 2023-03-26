@@ -152,8 +152,8 @@ function Pin({ pin, index, session, searchParameter, id }) {
       )}
 
       {deleteModal && (
-            <div className="fixed z-5 top-0 left-0 w-full h-full bg-black bg-opacity-40">
-              <div className="bg-white w-2/5 mx-auto mt-32 rounded-md border border-gray-300 z-10 p-8">
+            <div className="fixed z-100 top-0 left-0 w-full h-full bg-black bg-opacity-40">
+              <div className="bg-white w-2/5 mx-auto mt-32 rounded-md border border-gray-300 p-8">
                 <span
                   className="text-gray-500 text-right text-2xl block cursor-pointer p-4"
                   onClick={() => setDeleteModal(!deleteModal)}
