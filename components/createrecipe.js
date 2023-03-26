@@ -7,6 +7,7 @@ import Spinner from "./spinner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
+import { images } from "@/next.config";
 
 function CreateRecipe({ session }) {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -179,25 +180,48 @@ function CreateRecipe({ session }) {
     };
     localStorage.setItem("recipe", JSON.stringify(recipe));
 
-    try {
-      recipe = await postRecipeInfo(
-        userId,
-        recipe.name,
-        recipe.description,
-        recipe.timeHours,
-        recipe.timeMinutes,
-        recipe.price
-      );
-      const recipeId = recipe[0].recipe_id;
+    const formIsReady = () => {
+      return !!recipe.name && !!recipe.description && !!recipe.price && !!recipe.timeHours && !!recipe.timeMinutes && 
+             !!category && !!ingredients.length && !!instructions.length && !!selectedImages
+    }
 
-      // Call the other three functions with the recipeId
-      await postRecipeCategories(recipeId, category);
-      await postRecipeIngredients(recipeId, ingredients);
-      await postRecipeSteps(recipeId, instructions);
-      await postRecipeImages(recipeId, selectedImagesFile);
-
-      localStorage.clear()
-      toast.success('🖊️ Recipe Created!', {
+    if(formIsReady()) {
+      try {
+        recipe = await postRecipeInfo(
+          userId,
+          recipe.name,
+          recipe.description,
+          recipe.timeHours,
+          recipe.timeMinutes,
+          recipe.price
+        );
+        const recipeId = recipe[0].recipe_id;
+  
+        // Call the other three functions with the recipeId
+        await postRecipeCategories(recipeId, category);
+        await postRecipeIngredients(recipeId, ingredients);
+        await postRecipeSteps(recipeId, instructions);
+        await postRecipeImages(recipeId, selectedImagesFile);
+  
+        localStorage.clear()
+        toast.success('🖊️ Recipe Created!', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+        router.push("/main")
+        
+      } catch (error) {
+        console.log(error);
+  
+      }
+    } else {
+      toast.error('🖊️ Error! Make sure to fill out all fields to save your recipe!', {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -206,12 +230,7 @@ function CreateRecipe({ session }) {
         draggable: true,
         progress: undefined,
         theme: "light",
-        });
-      router.push("/main")
-      
-    } catch (error) {
-      console.log(error);
-
+      });
     }
   };
 
@@ -266,7 +285,12 @@ function CreateRecipe({ session }) {
       const categoryArray = Array.isArray(prevSelectedOptions)
         ? prevSelectedOptions
         : [];
-      return [...categoryArray, value];
+      
+      if(!categoryArray.includes(value)) {
+        return [...categoryArray, value];  
+      } else {
+        return categoryArray;
+      }
     });
   };
 
@@ -349,7 +373,9 @@ function CreateRecipe({ session }) {
           <input
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
             placeholder="Add your title"
             className="outline-none text-2xl sm:text-3xl font-md border-b-2 border-gray-200 p-2"
           />
@@ -357,7 +383,9 @@ function CreateRecipe({ session }) {
           <input
             type="text"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value)
+            }}
             placeholder="A really yummy dish!"
             className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
           />
@@ -366,39 +394,45 @@ function CreateRecipe({ session }) {
             <input
               type="value"
               value={timeHours}
-              onChange={(e) => setTimeHours(e.target.value)}
+              onChange={(e) => {
+                setTimeHours(e.target.value);
+              }}
               placeholder="In hours, 1 = 1hr"
               className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
             />{" "}
             <input
               type="value"
               value={timeMinutes}
-              onChange={(e) => setTimeMinutes(e.target.value)}
+              onChange={(e) => {
+                setTimeMinutes(e.target.value);
+              }}
               placeholder="In minutes, 30 = 30mins"
               className="outline-none text-lg sm:text-md font-md border-b-2 border-gray-200 p-2"
             />
           </div>
-          <h4 className="text-xl font-bold">Price</h4>
+          <h4 className="text-xl font-bold">Price.</h4>
           <select
             value={price}
-            onChange={(event) => setPrice(event.target.value)}
+            onChange={(event) => {
+              setPrice(event.target.value);
+            }}
             className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
           >
-            <option value="">Select price range</option>
+            <option value="" disabled selected>Select price range</option>
             <option value="$">$</option>
             <option value="$$">$$</option>
             <option value="$$$">$$$</option>
           </select>{" "}
           <div>
             <h4 className="mb-2 font-bold text:lg sm:text-xl">
-              Choose Recipe Category.
+              Choose Recipe Categories.
             </h4>
             <div className="flex justify-between">
               <select
                 className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
                 onChange={categoryChange}
               >
-                <option value="">Select Category</option>
+                <option value="" selected disabled>Select Categories</option>
                 {categories &&
                   categories.map((item, index) => (
                     <>
@@ -475,7 +509,7 @@ function CreateRecipe({ session }) {
             </div>
           </div>
           <div className="flex justify-between pr-4 items-center">
-            <h2 className="font-bold text-2xl mb-2">Instructions</h2>
+            <h2 className="font-bold text-2xl mb-2">Steps.</h2>
             <PlusIcon
               className="h-8 w-8 lg:h-6 lg:w-6 mr-2 bg-black text-white rounded-lg"
               onClick={() => setInstructionModal(!instructionModal)}
