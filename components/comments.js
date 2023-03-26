@@ -72,7 +72,6 @@ const Comments = ({ toggleModal, token, session, id }) => {
   };
 
   useEffect(() => {
-    console.log("USER ID:", session.user.account[0].user_id)
     fetchComments();
   }, [newComment]);
 
@@ -119,7 +118,7 @@ const Comments = ({ toggleModal, token, session, id }) => {
           {commentInfo &&
             commentInfo.map(({ comment, username, comment_id, date, user_id }) => (
               <div key={comment_id}>
-                <CommentComponent comment={comment} username={username} date={date} userId={user_id} session={session} />
+                <CommentComponent comment={comment} username={username} date={date} userId={user_id} recipeId={id} commentId={comment_id} session={session} />
               </div>
             ))}
         </div>
