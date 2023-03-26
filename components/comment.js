@@ -97,8 +97,8 @@ function CommentComponent({ comment, username, date, userId, recipeId, commentId
                     <h4 className="font-bold">Are you sure you want to delete this comment?</h4>
                   </div>
                   <div className="p-2 flex items-center justify-center">
-                    <button className="text-center bg-rose-600 mt-4 mr-2 text-white text-lg rounded p-2" onClick={() => deleteCommentHandler(commentId)}>Yes, I Do!</button>
-                    <button className="text-center bg-green-500 mt-4 mr-2 text-white text-lg rounded p-2" onClick={() => setDeleteModal(!deleteModal)}>Nah just kidding 😆</button>
+                    <button className="text-center bg-green-500 mt-4 mr-2 text-white text-lg rounded p-2" onClick={() => deleteCommentHandler(commentId)}>Yes, I Do!</button>
+                    <button className="text-center bg-rose-600 mt-4 mr-2 text-white text-lg rounded p-2" onClick={() => setDeleteModal(!deleteModal)}>Nah just kidding 😆</button>
                   </div>
                 </div>   
               </div>
@@ -126,8 +126,8 @@ function CommentComponent({ comment, username, date, userId, recipeId, commentId
                     />
                   </div>
                   <div className="p-2 flex items-center justify-center">
-                    <button className="text-center bg-rose-600 mt-4 mr-2 text-white text-lg rounded p-2" onClick={() => editCommentHandler(commentId)}>Edit comment</button>
-                    <button className="text-center bg-green-500 mt-4 mr-2 text-white text-lg rounded p-2" onClick={() => { setCommentText(comment); setEditModal(!editModal) }}>Cancel</button>
+                    <button className="text-center bg-green-500 mt-4 mr-2 text-white text-lg rounded p-2" onClick={() => editCommentHandler(commentId)}>Edit comment</button>
+                    <button className="text-center bg-rose-600 mt-4 mr-2 text-white text-lg rounded p-2" onClick={() => { setCommentText(comment); setEditModal(!editModal) }}>Cancel</button>
                   </div>
                 </div>   
               </div>
