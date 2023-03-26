@@ -46,8 +46,6 @@ function EditRecipe({ session }) {
     getRecipeBasicData();
     //get recipe images file
     getRecipeImages();
-    // renders image
-    // renderImageFiles()
     //get recipe categories
     getRecipeCategories();
     //get recipe ingredients
@@ -133,29 +131,6 @@ function EditRecipe({ session }) {
       console.log(error);
     }
   };
-
-  //   // File image helper which fetches image and makes them into a blob
-  //   const renderImageFiles = async (images) => {
-  //     const newData = await Promise.all(
-  //         selectedImagesFile.map(async (image) => {
-  //         const response = await fetch(`http://localhost:8000/recipes/${recipeId}/images/${image.image_id}`, {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //         })
-  //         const blob = await response.blob()
-  //         console.log(blob)
-  //         const url = URL.createObjectURL(blob)
-  //         console.log(url)
-  //         // console.log({...image})
-  //         return { url, ...image }
-  //       })
-  //     )
-  //     const imagesData = newData.map((image) => {
-  //         return image.url
-  //     })
-  //     console.log(imagesData)
-  //     setSelectedImages(imagesData)
-  //     console.log(selectedImages)
-  //   }
 
   const getRecipeCategories = async () => {
     try {
@@ -265,13 +240,8 @@ function EditRecipe({ session }) {
   const updateRecipeImages = async (recipeId, images) => {
     const formData = new FormData();
     for (let i = 0; i < images.length; i++) {
-      // console.log(images[i])
       formData.append("images", images[i]);
     }
-
-    // for(const val of formData.values()) {
-    //   console.log(val)
-    // }
 
     try {
       const response = await axios.put(
